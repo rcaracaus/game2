@@ -25,16 +25,16 @@ animate = function() {
 	}
 	ctx.clearRect(0, 0, c.width, c.height);
 	drawPlayer();
+	drawTarget();
 	onPlayerSkin();
-}
-
-
-drawTarget = function() {
-	ctx.strokeRect(100, 100, 50, 50);
 }
 
 drawPlayer = function() {
 	ctx.strokeRect(x, y, w, w);
+}
+
+drawTarget = function() {
+	ctx.strokeRect(c.width-w, c.height-w, w, w);
 }
 
 function addPoints(points) {
