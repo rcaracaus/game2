@@ -1,5 +1,12 @@
+c = document.getElementById("pane");
+ctx = c.getContext("2d");
 w = 50;
+x = 0;
+var mouseX;
+var mouseY;
 var refreshIntervalId;
+mouseDetect();
+
 
 start = function () {
 	clearInterval(refreshIntervalId);
@@ -7,68 +14,27 @@ start = function () {
 	y = 0;
 	vy = .25;
 	vx = .25;
-	c = document.getElementById("pane");
-	ctx = c.getContext("2d");
-	detectMouse();
+	
 	refreshIntervalId = setInterval(animate, 10);
-}
-
-drawTarget = function() {
-	ctx.clearRect(0, 0, c.width, c.height);
-	ctx.strokeRect(x, y, w, w);
-}
-
-onTarget = function() {
-    if (
-    	(mouseX >= x && mouseX <= x + w) 
-    	&& (mouseY >= y && mouseY <= y + w)) {
-		return true;
-	} else { 
-		return false; 
-	}
 }
 
 animate = function() {
     if (x + w < c.width && y + w < c.height) {
 		x += vx;
 		y += vy;
-	} 
-	drawTarget();
+	}
+	ctx.clearRect(0, 0, c.width, c.height);
+	drawPlayer();
+	onPlayerSkin();
 }
 
 
-detectMouse = function() {
-	c.addEventListener("mousemove", function (){
-		
-		 var x = new Number();
-	     var y = new Number();
+drawTarget = function() {
+	ctx.strokeRect(100, 100, 50, 50);
+}
 
-		if (event.x != undefined && event.y != undefined)
-	    {
-	      x = event.x;
-	      y = event.y;
-	    }
-	    else // Firefox method to get the position
-	    {
-	      x = event.clientX + document.body.scrollLeft +
-	          document.documentElement.scrollLeft;
-	      y = event.clientY + document.body.scrollTop +
-	          document.documentElement.scrollTop;
-	    }
-
-	    x -= c.offsetLeft;
-	    y -= c.offsetTop;
-
-	    mouseX = x;
-	    mouseY = y;
-
-	    if (onTarget()) {
-		  c.style.cursor = 'pointer';
-		} else {
-		  c.style.cursor = 'auto';
-		}
-
-	}, false);
+drawPlayer = function() {
+	ctx.strokeRect(x, y, w, w);
 }
 
 function addPoints(points) {
@@ -78,6 +44,37 @@ function addPoints(points) {
 function getPoints() {
     return localStorage.getItem('points');
 }
+
+
+$('canvas').click( function() {
+	if (onPlayer()) {
+		vy += 0.5;
+	}
+});
+
+function onPlayer() {
+    if ((mouseX >= x && mouseX <= x + w) 
+    	&& (mouseY >= y && mouseY <= y + w)) {
+		return true;
+	} else { 
+		return false; 
+	}
+}
+
+function onPlayerSkin() {
+	if (onPlayer()) {
+	  if (c.style.cursor != 'pointer') c.style.cursor = 'pointer';
+	} else {
+	  if (c.style.cursor != 'auto') c.style.cursor = 'auto';
+	}
+}
+
+
+
+
+
+
+
 
 
 
