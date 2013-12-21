@@ -1,24 +1,24 @@
-x = 0;
-y = 0;
-vx = 1;
-vy = 1;
-click = false;
 w = 50;
+var refreshIntervalId;
 
 start = function () {
+	clearInterval(refreshIntervalId);
 	x = 0;
 	y = 0;
+	vy = .25;
+	vx = .25;
 	c = document.getElementById("pane");
 	ctx = c.getContext("2d");
 	detectMouse();
-	return setInterval(animate, 10);
+	refreshIntervalId = setInterval(animate, 10);
 }
 
-drawTarget = function () {
+drawTarget = function() {
+	ctx.clearRect(0, 0, c.width, c.height);
 	ctx.strokeRect(x, y, w, w);
 }
 
-onTarget = function () {
+onTarget = function() {
     if (
     	(mouseX >= x && mouseX <= x + w) 
     	&& (mouseY >= y && mouseY <= y + w)) {
@@ -28,19 +28,14 @@ onTarget = function () {
 	}
 }
 
-animate = function () {
+animate = function() {
     if (x + w < c.width && y + w < c.height) {
 		x += vx;
 		y += vy;
-	}
-	clear();
+	} 
 	drawTarget();
-	ctx.strokeRect(x, y, w, w);
 }
 
-function clear() {
-  ctx.clearRect(0, 0, c.width, c.height);
-}
 
 detectMouse = function() {
 	c.addEventListener("mousemove", function (){
