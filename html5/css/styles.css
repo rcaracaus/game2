@@ -1,0 +1,32 @@
+div {
+	position: absolute;
+}
+
+div.active {
+	cursor: pointer;
+}
+
+.target {
+	background: black;
+}
+
+.player {
+	background: black;
+	width: 100px;
+	height: 100px;
+}
+
+.player-1 {
+	background:red;
+}
+.player-2 {
+	background:green;
+}
+.player-3 {
+	background:blue;
+}
+
+button {
+	position: absolute;
+	z-index: 1000;
+}

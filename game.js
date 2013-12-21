@@ -14,7 +14,6 @@ start = function () {
 	y = 0;
 	vy = .25;
 	vx = .25;
-	
 	refreshIntervalId = setInterval(animate, 10);
 }
 
