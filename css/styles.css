@@ -12,11 +12,16 @@ div.active {
 
 .target {
 	background: black;
-	width: 100px;
-	height: 100px;
 }
 
 button {
 	position: absolute;
 	z-index: 1000;
+}
+
+#points {
+    position: fixed;
+    right: 0;
+    padding: 20px;
+    background: blue;
 }

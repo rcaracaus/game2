@@ -2,3 +2,8 @@
 	background: url('poo1.png') transparent no-repeat;
 	background-size: 100% auto;
 }
+
+.player {
+    background: url('toilet.png') transparent no-repeat;
+    background-size: 100% auto;
+}
