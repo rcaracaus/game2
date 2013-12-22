@@ -1,4 +1,0 @@
-c = document.getElementById("pane");
-
-
-
