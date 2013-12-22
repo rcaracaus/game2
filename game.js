@@ -23,12 +23,12 @@ animate = function() {
 		y += vy;
 	}
 	ctx.clearRect(0, 0, c.width, c.height);
-	drawPlayer();
+	drawtarget();
 	drawTarget();
-	onPlayerSkin();
+	ontargetSkin();
 }
 
-drawPlayer = function() {
+drawtarget = function() {
 	ctx.strokeRect(x, y, w, w);
 }
 
@@ -46,12 +46,12 @@ function getPoints() {
 
 
 $('canvas').click( function() {
-	if (onPlayer()) {
+	if (ontarget()) {
 		vy += 0.5;
 	}
 });
 
-function onPlayer() {
+function ontarget() {
     if ((mouseX >= x && mouseX <= x + w) 
     	&& (mouseY >= y && mouseY <= y + w)) {
 		return true;
@@ -60,8 +60,8 @@ function onPlayer() {
 	}
 }
 
-function onPlayerSkin() {
-	if (onPlayer()) {
+function ontargetSkin() {
+	if (ontarget()) {
 	  if (c.style.cursor != 'pointer') c.style.cursor = 'pointer';
 	} else {
 	  if (c.style.cursor != 'auto') c.style.cursor = 'auto';

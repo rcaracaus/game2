@@ -10,20 +10,10 @@ div.active {
 	background: black;
 }
 
-.player {
+.target {
 	background: black;
 	width: 100px;
 	height: 100px;
-}
-
-.player-1 {
-	background:red;
-}
-.player-2 {
-	background:green;
-}
-.player-3 {
-	background:blue;
 }
 
 button {
