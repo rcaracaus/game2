@@ -1,0 +1,41 @@
+@import "sassy-buttons";
+@import "compass";
+
+
+div {
+	position: absolute;
+}
+
+div.active {
+	cursor: pointer;
+}
+
+.target {
+	background: black;
+}
+
+.target {
+	background: black;
+}
+
+button {
+	position: absolute;
+	z-index: 1000;
+	right: 700px;
+	@include sassy-button(shiny, 3px, 21px, #45b29a, green, white, inset, auto-states)
+}
+
+#points {
+    position: fixed;
+
+		background: #45b29a;
+		width: 100px;
+		height: 100px;
+		margin-right: 100px;
+		font-size: 30px;
+		text-align: center;
+		vertical-align: middle;
+		line-height: 90px;  
+		border-radius: 3px;
+		-webkit-border-radius: 3px;
+}
