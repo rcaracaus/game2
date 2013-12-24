@@ -9,21 +9,55 @@ playerArray = new Array();
 
 w = 50;
 
+
 fps = 400;
 
 targetsCreated = 0;
+
+fps = 60;
+
 playersCreated = 0;
 
-// Better performance to set variables once?
-windowHeight = $(window).height();
-windowWidth = $(window).width();
 
 points = 0;
 
 var vx;
 
+function init() {
+
+    // Better performance to set variables once?
+    windowHeight = $(window).height();
+    windowWidth = $(window).width();
+
+    clearInterval(refreshIntervalId);
+    createTargets(targets);
+    createPlayers(players);
+
+    // Target's position should reset on init.
+    resetTargetPosition(targets);
+    resetPlayerPosition(players);
+    setKeys();
+    
+    // Start animation
+    animate();
+}
+
+function animate() {
+    refreshIntervalId = setInterval(function() {
+
+        targetArray.forEach( function(element, i) {
+            animateFallTargets(element);
+            // Prompt each target to fall separately.
+            targetMove(i, targetArray[i].x, targetArray[i].y, targetArray[i].vy);
+        });
 
 
+        playerArray.forEach( function(element, i) {
+            playerMove(i, playerArray[i].x, playerArray[i].y, playerArray[i].vy);
+        });
+
+    }, 1000/fps);
+}
 
 function createTargets(amount) {
 	for (var i = 0; i < amount; i++) {
@@ -34,7 +68,6 @@ function createTargets(amount) {
         targetDiv.id = targetId;
 		document.body.appendChild(targetDiv);
 	}
-    createTargets = noop;
 }
 
 function createPlayers(amount) {
@@ -45,7 +78,6 @@ function createPlayers(amount) {
         document.body.appendChild(playerDiv);
         playersCreated++;
     }
-    createPlayers = noop;
 }
 
 function targetMove(i, x, y, vy) {
@@ -87,65 +119,29 @@ function playerMove(i, x, y, vy) {
      */
 }
 
-function init() {
-	clearInterval(refreshIntervalId);
-	createTargets(targets);
-    createPlayers(players);
-    // Target's position should reset on init.
-    resetTargetPosition(targets);
-    resetPlayerPosition(players);
-    selectablePlayers(playerArray);
-
-    playerArray.forEach( function(element, i) {
-        animatePlayerTarget(element, i);
-    });
-    // Start animation
-    animate();
-}
-
-function animate() {
-    refreshIntervalId = setInterval(function() {
-
-
-
-        targetArray.forEach( function(element, i) {
-            animateFallTargets(element);
-            // Prompt each target to fall separately.
-            targetMove(i, targetArray[i].x, targetArray[i].y, targetArray[i].vy);
-        });
-
-
-        playerArray.forEach( function(element, i) {
-            playerMove(i, playerArray[i].x, playerArray[i].y, playerArray[i].vy);
-        });
-
-    }, 1000/fps);
-}
-
 function resetTargetPosition(amount) {
     // Reset each target's position on each init.
     for (var i = 0; i < amount; i++) {
         targetArray[i] = new Object();
-        targetArray[i].id = targetsCreated;
+        targetArray[i].id = i;
         targetArray[i].x = i * 100;
         targetArray[i].y = 0;
         targetArray[i].width = w;
         targetArray[i].height = w;
         targetArray[i].vy = Math.random() + 0.5;
         targetArray[i].isAlive = true;
-        targetsCreated++;
     }
 }
 
 function resetPlayerPosition(amount) {
-    // Reset each target's position on each init.
+    // Reset each player's position on each init.
     for (var i = 0; i < amount; i++) {
         playerArray[i] = new Object();
         playerArray[i].x = i * 100;
         playerArray[i].y = windowHeight - w;
         playerArray[i].width = w;
         playerArray[i].height = w;
-        playerArray[i].isActive = false;
+        playerArray[i].selected = false;
     }
 }
 
@@ -161,42 +157,44 @@ function animateFallTargets(element) {
     playerArray.forEach(function(player, i) {
         if(intersects(player, element, i) && element.isAlive) {
             points += 1;
-            var node = document.getElementById("points");
-            node.innerHTML = points;
+            document.getElementById("points").innerHTML = points;
             element.isAlive = false;
-
-
 
             var elem = document.getElementById('target-' + element.id);
             console.log('target-' + element.id);
-            if(elem) { elem.style.display = "none"; }
+            elem.style.display = "none";
         }
     });
 }
 
 
 
-function animatePlayerTarget(element, i) {
+function setKeys(element, i) {
 
     $.fastKey('39', function() {
-        console.log(element.isActive);
-        if(element.isActive) {
-            element.x += 2;
+        for (var i = 0; i < playerArray.length; i++) {
+            if(playerArray[i].selected) {
+                playerArray[i].x += 2;
+            }
         }
     });
+
     $.fastKey('37', function() {
-        if(element.isActive) {
-            element.x -= 2;
+        for (var i = 0; i < playerArray.length; i++) {
+            if(playerArray[i].selected) {
+                playerArray[i].x -= 2;
+            }
         }
     });
+
+    selectedPlayer();
 
 }
 
-function selectablePlayers(playerArray) {
+function selectedPlayer() {
 
     activeFlag = 0;
-    playerArray[0].isActive = true;
-
+    playerArray[0].selected = true;
 
     document.body.onkeydown = function(event){
         event = event || window.event;
@@ -204,16 +202,17 @@ function selectablePlayers(playerArray) {
         if(keycode === 9){
             event.preventDefault();
 
-                if(activeFlag == -1) {
-                   playerArray[playerArray.length-1].isActive = false;
-                } else {
-                   playerArray[activeFlag].isActive = false;
-                }
-                activeFlag++;
-                playerArray[activeFlag].isActive = true;
-                if(activeFlag == playerArray.length - 1) {
-                    activeFlag = -1;
-                }
+            if(activeFlag == -1) {
+               playerArray[playerArray.length-1].selected = false;
+            } else {
+               playerArray[activeFlag].selected = false;
+            }
+
+            activeFlag++;
+            playerArray[activeFlag].selected = true;
+            if(activeFlag == playerArray.length - 1) {
+               activeFlag = -1;
+            }
 
         }
     }
