@@ -3,18 +3,15 @@ var refreshIntervalId;
 
 targets = 5;
 targetArray = new Array();
-
 players = 2;
 playerArray = new Array();
-
 w = 50;
 fps = 60;
 playersCreated = 0;
-
-
+resetRan = false;
 points = 0;
-
-var vx;
+var lowestVy;
+var lowestY;
 
 function init() {
 
@@ -27,8 +24,7 @@ function init() {
     createPlayers(players);
 
     // Target's position should reset on init.
-    resetTargetPosition(targets);
-    resetPlayerPosition(players);
+    reset();
     setKeys();
     
     // Start animation
@@ -52,6 +48,11 @@ function animate() {
     }, 1000/fps);
 }
 
+function reset() {
+    resetTargetPosition(targets);
+    resetPlayerPosition(players);
+}
+
 function createTargets(amount) {
 	for (var i = 0; i < amount; i++) {
 		targetRowClass = 'target-row-' + i;
@@ -63,40 +64,20 @@ function createTargets(amount) {
 	}
 }
 
-function createPlayers(amount) {
-    for (var i = 0; i < amount; i++) {
-        playerIdClass = 'player-' + playersCreated;
-        var playerDiv = document.createElement( 'div' );
-        playerDiv.className = 'player' + ' ' + playerIdClass;
-        document.body.appendChild(playerDiv);
-        playersCreated++;
-    }
-}
-
 function targetMove(i, x, y, vy) {
-    if (x + w < windowWidth && y + w < windowHeight) {
-    	y += vy;
-	}
-	targetRowClass = 'target-row-' + i;
-	var elems = document.getElementsByClassName(targetRowClass);
-	for(var i = 0; i < elems.length; i++) {
-    	elems[i].style.size = '100px';
-	    elems[i].style.top = y + "px";
-		elems[i].style.left = x + "px";
-		elems[i].style.width = w + "px";
-		elems[i].style.height = w + "px";
-	}
-    /*
-	var elems = document.getElementsByClassName(targetWaveClass);
-	for(var i = 0; i < elems.length; i++) {
-	    elems[i].style.top = (y - 100) + "px";
-	}
-	*/
-}
 
-function playerMove(i, x, y, vy) {
-    playerIdClass = 'player-' + i;
-    var elems = document.getElementsByClassName(playerIdClass);
+    if (x + w < windowWidth && y + w < windowHeight) {
+        y += vy;
+
+    } else if (targetArray[i].lowestY) {
+        // This makes sure that resetTargetPosition only runs once within a function.
+        if(!resetRan) {
+            resetRan = true;
+            resetTargetPosition(targets);
+        }
+    }
+    targetRowClass = 'target-row-' + i;
+    var elems = document.getElementsByClassName(targetRowClass);
     for(var i = 0; i < elems.length; i++) {
         elems[i].style.size = '100px';
         elems[i].style.top = y + "px";
@@ -117,14 +98,58 @@ function resetTargetPosition(amount) {
     for (var i = 0; i < amount; i++) {
         targetArray[i] = new Object();
         targetArray[i].id = i;
-        targetArray[i].x = i * 100;
+        targetArray[i].x = Math.floor(Math.random() * windowWidth) - w;
         targetArray[i].y = 0;
         targetArray[i].width = w;
         targetArray[i].height = w;
         targetArray[i].vy = Math.random() + 0.5;
         targetArray[i].isAlive = true;
+        targetArray[i].lowestY = false;
+    }
+
+
+     var elems = document.getElementsByClassName('target');
+     for(var i = 0; i < elems.length; i++) {
+        elems[i].style.display = "block";
+     }
+
+    // This resets lowest velocity of Y and tests if the a reset has run within the animation.
+    // todo: refactor
+    lowestVy = 0;
+    resetRan = false;
+
+}
+
+
+function createPlayers(amount) {
+    for (var i = 0; i < amount; i++) {
+        playerIdClass = 'player-' + playersCreated;
+        var playerDiv = document.createElement( 'div' );
+        playerDiv.className = 'player' + ' ' + playerIdClass;
+        document.body.appendChild(playerDiv);
+        playersCreated++;
     }
 }
+
+function playerMove(i, x, y, vy) {
+    playerIdClass = 'player-' + i;
+    var elems = document.getElementsByClassName(playerIdClass);
+    for(var i = 0; i < elems.length; i++) {
+        elems[i].style.size = '100px';
+        elems[i].style.top = y + "px";
+        elems[i].style.left = x + "px";
+        elems[i].style.width = w + "px";
+        elems[i].style.height = w + "px";
+    }
+    /*
+     var elems = document.getElementsByClassName(targetWaveClass);
+     for(var i = 0; i < elems.length; i++) {
+     elems[i].style.top = (y - 100) + "px";
+     }
+     */
+}
+
+
 
 function resetPlayerPosition(amount) {
     // Reset each player's position on each init.
@@ -140,11 +165,21 @@ function resetPlayerPosition(amount) {
 
 function animateFallTargets(element) {
 
+
     if (
         element.x + w < $(window).width()
             && element.y + w < $(window).height() + w // Add width to hide targets
         ) {
         element.y += element.vy;
+
+        for (var i = 0; i < targetArray.length; i++) {
+            if(lowestVy == undefined || lowestVy == 0) {
+                lowestVy = targetArray[i].vy;
+            } else if(targetArray[i].vy < lowestVy) {
+                lowestVy = targetArray[i].vy;
+                targetArray[i].lowestY = true;
+            }
+        }
     }
 
     playerArray.forEach(function(player, i) {
@@ -154,7 +189,6 @@ function animateFallTargets(element) {
             element.isAlive = false;
 
             var elem = document.getElementById('target-' + element.id);
-            console.log('target-' + element.id);
             elem.style.display = "none";
         }
     });
@@ -267,7 +301,5 @@ function intersects(player,target, i) {
     };
 
 })(jQuery, window, document);
-
-function noop() {};
 
 
