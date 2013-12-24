@@ -1,23 +1,21 @@
 /* Global Vars */
 var refreshIntervalId;
 
-targets = 5;
+targets = 50;
 targetArray = new Array();
 players = 2;
 playerArray = new Array();
-w = 50;
 fps = 60;
 playersCreated = 0;
 resetRan = false;
 points = 0;
-var lowestVy;
-var lowestY;
 
 function init() {
 
     // Better performance to set variables once?
     windowHeight = $(window).height();
     windowWidth = $(window).width();
+    w = windowWidth / 30;
 
     clearInterval(refreshIntervalId);
     createTargets(targets);
@@ -68,13 +66,6 @@ function targetMove(i, x, y, vy) {
 
     if (x + w < windowWidth && y + w < windowHeight) {
         y += vy;
-
-    } else if (targetArray[i].lowestY) {
-        // This makes sure that resetTargetPosition only runs once within a function.
-        if(!resetRan) {
-            resetRan = true;
-            resetTargetPosition(targets);
-        }
     }
     targetRowClass = 'target-row-' + i;
     var elems = document.getElementsByClassName(targetRowClass);
@@ -98,8 +89,8 @@ function resetTargetPosition(amount) {
     for (var i = 0; i < amount; i++) {
         targetArray[i] = new Object();
         targetArray[i].id = i;
-        targetArray[i].x = Math.floor(Math.random() * windowWidth) - w;
-        targetArray[i].y = 0;
+        targetArray[i].x = Math.floor(Math.random() * (windowWidth - w));
+        targetArray[i].y = 0 - w;
         targetArray[i].width = w;
         targetArray[i].height = w;
         targetArray[i].vy = Math.random() + 0.5;
@@ -112,11 +103,6 @@ function resetTargetPosition(amount) {
      for(var i = 0; i < elems.length; i++) {
         elems[i].style.display = "block";
      }
-
-    // This resets lowest velocity of Y and tests if the a reset has run within the animation.
-    // todo: refactor
-    lowestVy = 0;
-    resetRan = false;
 
 }
 
@@ -165,20 +151,18 @@ function resetPlayerPosition(amount) {
 
 function animateFallTargets(element) {
 
-
-    if (
-        element.x + w < $(window).width()
-            && element.y + w < $(window).height() + w // Add width to hide targets
-        ) {
+    if (element.x + w < $(window).width() && element.y + w < $(window).height() + w) {
         element.y += element.vy;
+    }
 
-        for (var i = 0; i < targetArray.length; i++) {
-            if(lowestVy == undefined || lowestVy == 0) {
-                lowestVy = targetArray[i].vy;
-            } else if(targetArray[i].vy < lowestVy) {
-                lowestVy = targetArray[i].vy;
-                targetArray[i].lowestY = true;
-            }
+    var elems = document.getElementsByClassName('target');
+
+    for (var i = 0; i < targetArray.length; i++) {
+        if (targetArray[i].y > windowHeight) {
+            elems[i].style.display = "block";
+            targetArray[i].isAlive = true;
+            targetArray[i].x = Math.floor(Math.random() * (windowWidth - w));
+            targetArray[i].y = 0 - w;
         }
     }
 
