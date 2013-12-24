@@ -21,7 +21,15 @@ button {
 
 #points {
     position: fixed;
-    right: 0;
-    padding: 20px;
-    background: blue;
+
+		background: #45b29a;
+		width: 100px;
+		height: 100px;
+		margin-right: 100px;
+		font-size: 30px;
+		text-align: center;
+		vertical-align: middle;
+		line-height: 90px;  
+		border-radius: 3px;
+		-webkit-border-radius: 3px;
 }

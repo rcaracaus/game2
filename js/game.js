@@ -9,7 +9,7 @@ playerArray = new Array();
 
 w = 50;
 
-fps = 60;
+fps = 400;
 
 targetsCreated = 0;
 playersCreated = 0;
