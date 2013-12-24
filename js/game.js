@@ -4,10 +4,12 @@ var refreshIntervalId;
 targets = 5;
 targetArray = new Array();
 
-players = 1;
+players = 2;
 playerArray = new Array();
 
-w = 100;
+w = 50;
+
+fps = 60;
 
 targetsCreated = 0;
 playersCreated = 0;
@@ -19,6 +21,8 @@ windowWidth = $(window).width();
 points = 0;
 
 var vx;
+
+
 
 
 function createTargets(amount) {
@@ -90,16 +94,19 @@ function init() {
     // Target's position should reset on init.
     resetTargetPosition(targets);
     resetPlayerPosition(players);
+    selectablePlayers(playerArray);
+
     playerArray.forEach( function(element, i) {
-        animatePlayerTargets(element);
+        animatePlayerTarget(element, i);
     });
     // Start animation
     animate();
-
 }
 
 function animate() {
     refreshIntervalId = setInterval(function() {
+
+
 
         targetArray.forEach( function(element, i) {
             animateFallTargets(element);
@@ -107,11 +114,12 @@ function animate() {
             targetMove(i, targetArray[i].x, targetArray[i].y, targetArray[i].vy);
         });
 
+
         playerArray.forEach( function(element, i) {
             playerMove(i, playerArray[i].x, playerArray[i].y, playerArray[i].vy);
         });
 
-    }, 2);
+    }, 1000/fps);
 }
 
 function resetTargetPosition(amount) {
@@ -137,7 +145,7 @@ function resetPlayerPosition(amount) {
         playerArray[i].y = windowHeight - w;
         playerArray[i].width = w;
         playerArray[i].height = w;
-        playerArray[i].vx = .5;
+        playerArray[i].isActive = false;
     }
 }
 
@@ -168,21 +176,49 @@ function animateFallTargets(element) {
 
 
 
-function animatePlayerTargets(element) {
-    if (
-        element.x + w < $(window).width()
-            && element.y + w < $(window).height() + w // Add width to hide targets
-        ) {
+function animatePlayerTarget(element, i) {
 
-        $.fastKey('39', function() {
-            element.x += 1;
-        });
+    $.fastKey('39', function() {
+        console.log(element.isActive);
+        if(element.isActive) {
+            element.x += 2;
+        }
+    });
+    $.fastKey('37', function() {
+        if(element.isActive) {
+            element.x -= 2;
+        }
+    });
 
-        $.fastKey('37', function() {
-            element.x -= 1;
-        });
+}
+
+function selectablePlayers(playerArray) {
+
+    activeFlag = 0;
+    playerArray[0].isActive = true;
+
+
+    document.body.onkeydown = function(event){
+        event = event || window.event;
+        var keycode = event.charCode || event.keyCode;
+        if(keycode === 9){
+            event.preventDefault();
+
+                if(activeFlag == -1) {
+                   playerArray[playerArray.length-1].isActive = false;
+                } else {
+                   playerArray[activeFlag].isActive = false;
+                }
+                activeFlag++;
+                playerArray[activeFlag].isActive = true;
+                if(activeFlag == playerArray.length - 1) {
+                    activeFlag = -1;
+                }
+
+        }
     }
 }
+
 
 function intersects(player,target, i) {
     return (player.x <=  target.x + target.width &&
