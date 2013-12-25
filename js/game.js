@@ -1,7 +1,7 @@
 /* Global Vars */
 var refreshIntervalId;
 
-targets = 50;
+targets = 10;
 targetArray = new Array();
 players = 2;
 playerArray = new Array();
@@ -26,10 +26,11 @@ function init() {
     setKeys();
     
     // Start animation
-    animate();
+    animateTargets();
+    animatePlayers();
 }
 
-function animate() {
+function animateTargets() {
     refreshIntervalId = setInterval(function() {
 
         targetArray.forEach( function(element, i) {
@@ -38,13 +39,17 @@ function animate() {
             targetMove(i, targetArray[i].x, targetArray[i].y, targetArray[i].vy);
         });
 
+    }, 1000/fps);
+}
 
+function animatePlayers() {
+    refreshIntervalId = setInterval(function() {
         playerArray.forEach( function(element, i) {
             playerMove(i, playerArray[i].x, playerArray[i].y, playerArray[i].vy);
         });
-
-    }, 1000/fps);
+    });
 }
+
 
 function reset() {
     resetTargetPosition(targets);
@@ -127,6 +132,7 @@ function playerMove(i, x, y, vy) {
         elems[i].style.width = w + "px";
         elems[i].style.height = w + "px";
     }
+
     /*
      var elems = document.getElementsByClassName(targetWaveClass);
      for(var i = 0; i < elems.length; i++) {
@@ -134,7 +140,6 @@ function playerMove(i, x, y, vy) {
      }
      */
 }
-
 
 
 function resetPlayerPosition(amount) {
@@ -206,6 +211,7 @@ function selectedPlayer() {
 
     activeFlag = 0;
     playerArray[0].selected = true;
+    $('.player-0').addClass('active');
 
     document.body.onkeydown = function(event){
         event = event || window.event;
@@ -215,12 +221,16 @@ function selectedPlayer() {
 
             if(activeFlag == -1) {
                playerArray[playerArray.length-1].selected = false;
+                $('.player-' + Number(playerArray.length-1)).removeClass('active');
             } else {
                playerArray[activeFlag].selected = false;
+                $('.player-'+ activeFlag).removeClass('active');
             }
 
             activeFlag++;
             playerArray[activeFlag].selected = true;
+            $('.player-' + activeFlag).addClass('active');
+
             if(activeFlag == playerArray.length - 1) {
                activeFlag = -1;
             }

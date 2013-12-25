@@ -14,8 +14,8 @@ div.active {
 	background: black;
 }
 
-.target {
-	background: black;
+.player.active {
+    outline: dashed 4px orange;
 }
 
 button {
@@ -28,4 +28,6 @@ button {
     right: 0;
     padding: 20px;
     background: blue;
+    color: white;
+    font-weight:bold;
 }
