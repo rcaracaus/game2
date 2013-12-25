@@ -10,6 +10,10 @@ div {
 	position: absolute;
 }
 
+.startForm {
+    position: relative;
+}
+
 div.active {
 	cursor: pointer;
 }
@@ -34,14 +38,6 @@ button {
 
 .controls div {
  padding: 10px;
- position: block;
-}
-
-.controls div#points {
-    background: red;
-    top: 40px;
-}
-
-.controls div#timer {
+ position: relative;
     background: green;
 }

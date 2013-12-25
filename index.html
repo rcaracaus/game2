@@ -14,16 +14,41 @@
 
 <body>
 <div class="wrapper">
-	<button type="button">Reset</button>
+
+    <div class="startForm">
+
+        <form id="start">
+            <label>Name</label>
+            <input required type="text" id="input-name" placeholder="Enter your name"></input>
+            <input type="submit" value="Start">
+        </form>
+
+
+    </div>
 
     <div class="controls">
-        <div id="points">0</div>
+
         <div id="timer">0</div>
+        <div class="scoreWrapper">
+            <div id="points">0</div>
+            <h3>Your High Score</h3>
+            <div class="yourHighScore"></div>
+            <button class="saveHighScore">Save High Score</button>
+        </div>
+        <div id="highscores">
+            <h2>High scores</h2>
+            <button id="getHighScores" type="button">Get High Scores</button>
+            <div id="scores"></div>
+        </div>
     </div>
 </div>
 
 	<script src="js/jquery.js" type="text/javascript"></script>
+    <script src="js/jquery.validate.js" type="text/javascript"></script>
  	<script src="js/game.js"></script>
  	<script src="js/script.js"></script>
+    <script src="http://www.parsecdn.com/js/parse-1.2.15.min.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/parse.js"></script>
 </body>
 </html>

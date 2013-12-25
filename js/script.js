@@ -1,8 +1,28 @@
 $(document).ready(function () {
 
-	$('button').click(function() {
-        init();
+	$('#getHighScores').click(function() {
+        getHighScores();
 	});
+
+    $('.saveHighScore').click(function() {
+        saveHighScore();
+    });
+
+    $( "#start" ).submit(function( event ) {
+        name = document.getElementById("input-name").value;
+
+        localStorage.setItem('name', name);
+        init();
+        event.preventDefault();
+    });
+
+    $( ".yourHighScore" ).text(function() {
+        return localStorage.getItem('highScore');
+    });
+
+
+
+
 
 
 

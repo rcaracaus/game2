@@ -8,7 +8,7 @@ playerArray = new Array();
 fps = 60;
 playersCreated = 0;
 resetRan = false;
-points = 0;
+window.points = 0;
 
 function init() {
 
@@ -54,6 +54,9 @@ function animatePlayers() {
 
 
 function reset() {
+    setLocalHighScore();
+    resetScore();
+    startTimer();
     resetTargetPosition(targets);
     resetPlayerPosition(players);
 }
@@ -175,8 +178,8 @@ function animateFallTargets(element) {
 
     playerArray.forEach(function(player, i) {
         if(intersects(player, element, i) && element.isAlive) {
-            points += 1;
-            document.getElementById("points").innerHTML = points;
+            window.points += 1;
+            document.getElementById("points").innerHTML = window.points;
             element.isAlive = false;
 
             var elem = document.getElementById('target-' + element.id);
@@ -257,7 +260,7 @@ function startTimer() {
         if (count <= 0)
         {
             clearInterval(counter);
-            //counter ended, do something here
+            reset();
             return;
         }
 
@@ -266,6 +269,20 @@ function startTimer() {
 }
 
 
+function setLocalHighScore() {
+    if(!localStorage.getItem('highScore')) {
+        localStorage.setItem('highScore', window.points);
+    } else if ( window.points > localStorage.getItem('highScore')) {
+        localStorage.setItem('highScore', window.points);
+    }
+    $( ".yourHighScore" ).text(function() {
+        return localStorage.getItem('highScore');
+    });
+}
+
+function resetScore() {
+  window.points = 0;
+}
 
 
 
