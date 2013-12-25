@@ -2,6 +2,10 @@ body {
     overflow: hidden;
 }
 
+.wrapper {
+    position: relative;
+}
+
 div {
 	position: absolute;
 }
@@ -23,11 +27,21 @@ button {
 	z-index: 1000;
 }
 
-#points {
-    position: fixed;
-    right: 0;
-    padding: 20px;
-    background: blue;
+.controls {
+ right: 50px;
     color: white;
-    font-weight:bold;
+}
+
+.controls div {
+ padding: 10px;
+ position: block;
+}
+
+.controls div#points {
+    background: red;
+    top: 40px;
+}
+
+.controls div#timer {
+    background: green;
 }

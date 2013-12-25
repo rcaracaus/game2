@@ -12,6 +12,8 @@ points = 0;
 
 function init() {
 
+    startTimer();
+
     // Better performance to set variables once?
     windowHeight = $(window).height();
     windowWidth = $(window).width();
@@ -246,6 +248,25 @@ function intersects(player,target, i) {
         player.y <= target.y + target.height &&
         target.y <= player.y + player.height);
 }
+
+function startTimer() {
+    var count=60;
+    var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+    function timer(){
+        count=count-1;
+        if (count <= 0)
+        {
+            clearInterval(counter);
+            //counter ended, do something here
+            return;
+        }
+
+        document.getElementById("timer").innerHTML = count;
+    }
+}
+
+
+
 
 
 
