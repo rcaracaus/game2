@@ -7,6 +7,7 @@ players = 2;
 playerArray = new Array();
 fps = 60;
 playersCreated = 0;
+playerSelected = false;
 resetRan = false;
 window.points = 0;
 
@@ -36,7 +37,7 @@ function animateTargets() {
     refreshIntervalId = setInterval(function() {
 
         targetArray.forEach( function(element, i) {
-            animateFallTargets(element);
+            animateFallTargets(element, i);
             // Prompt each target to fall separately.
             targetMove(i, targetArray[i].x, targetArray[i].y, targetArray[i].vy);
         });
@@ -159,26 +160,24 @@ function resetPlayerPosition(amount) {
     }
 }
 
-function animateFallTargets(element) {
+function animateFallTargets(element, i) {
+
+    var elems = document.getElementsByClassName('target');
 
     if (element.x + w < $(window).width() && element.y + w < $(window).height() + w) {
         element.y += element.vy;
     }
 
-    var elems = document.getElementsByClassName('target');
-
-    for (var i = 0; i < targetArray.length; i++) {
-        if (targetArray[i].y > windowHeight) {
-            elems[i].style.display = "block";
-            targetArray[i].isAlive = true;
-            targetArray[i].x = Math.floor(Math.random() * (windowWidth - w));
-            targetArray[i].y = 0 - w;
-        }
+    if (element.y > windowHeight) {
+        elems[i].style.display = "block";
+        element.isAlive = true;
+        element.x = Math.floor(Math.random() * (windowWidth - w));
+        element.y = 0 - w;
     }
 
-    playerArray.forEach(function(player, i) {
-        if(intersects(player, element, i) && element.isAlive) {
-            window.points += 1;
+    playerArray.forEach(function(player) {
+        if(intersects(player, element) && element.isAlive) {
+            window.points++;
             document.getElementById("points").innerHTML = window.points;
             element.isAlive = false;
 
@@ -214,7 +213,6 @@ function setKeys(element, i) {
 
 function selectedPlayer() {
 
-    activeFlag = 0;
     playerArray[0].selected = true;
     $('.player-0').addClass('active');
 
@@ -223,29 +221,22 @@ function selectedPlayer() {
         var keycode = event.charCode || event.keyCode;
         if(keycode === 9){
             event.preventDefault();
-
-            if(activeFlag == -1) {
-               playerArray[playerArray.length-1].selected = false;
-                $('.player-' + Number(playerArray.length-1)).removeClass('active');
-            } else {
-               playerArray[activeFlag].selected = false;
-                $('.player-'+ activeFlag).removeClass('active');
-            }
-
-            activeFlag++;
-            playerArray[activeFlag].selected = true;
-            $('.player-' + activeFlag).addClass('active');
-
-            if(activeFlag == playerArray.length - 1) {
-               activeFlag = -1;
-            }
-
+            playerSelected = !playerSelected;
+            if (playerSelected) { playerArray[0].selected = true; playerArray[1].selected = false; }
+            else { playerArray[1].selected = true; playerArray[0].selected = false; }
+            loop(playerArray, function(i) {
+                if (playerArray[i].selected) {
+                    $('.player-' + i).addClass('active');
+                } else {
+                    $('.player-' + i).removeClass('active');
+                }
+            });
         }
     }
+
 }
 
-
-function intersects(player,target, i) {
+function intersects(player, target) {
     return (player.x <=  target.x + target.width &&
         target.x <=  player.x + player.width &&
         player.y <= target.y + target.height &&
@@ -260,7 +251,9 @@ function startTimer() {
         if (count <= 0)
         {
             clearInterval(counter);
-            reset();
+            setLocalHighScore();
+            resetScore();
+            startTimer();
             return;
         }
 
@@ -284,54 +277,8 @@ function resetScore() {
   window.points = 0;
 }
 
-
-
-
-/*!
- * jQuery.fastKey.js 0.1 - https://github.com/yckart/fastKey
- * Fire keyevents much faster
- *
- * Copyright (c) 2012 Yannick Albert (http://yckart.com) | @yckart #fastkey
- * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
- * 2012/10/07
- */
-;(function($, window, document, undefined) {
-
-    $.fastKey = function(key, fun, options) {return $.fn.fastKey(key, fun, options);};
-    $.fn.fastKey = function(key, fun, options) {
-
-        o = $.extend({}, $.fn.fastKey.options, options);
-
-        var keys = {},
-            iterater = function() {
-                for (var code in keys) {
-                    if (!keys.hasOwnProperty(code)) {continue;}
-                    switch (code) {
-                        case key:
-                            fun();
-                    }
-                }
-            };
-
-        setInterval(iterater, o.interval);
-
-        $(document).keydown(function(e) {
-            keys[e.keyCode] = true;
-            if (o.preventDefault && e.keyCode == key) {
-                e.preventDefault();
-            }
-        });
-
-        $(document).keyup(function(e) {
-            delete keys[e.keyCode];
-        });
-    };
-
-    $.fn.fastKey.options = {
-        interval: 10,
-        preventDefault: true
-    };
-
-})(jQuery, window, document);
-
-
+function loop(array, callback) {
+    for (var i = 0; i < array.length; i++) {
+        callback(i);
+    }
+}
