@@ -16,7 +16,9 @@ function saveHighScore() {
     gameScore.save(null, {
         success: function(gameScore) {
             // Execute any logic that should take place after the object is saved.
-            alert('New object created with objectId: ' + gameScore.id);
+						var playerName = gameScore.attributes.playerName;
+						playerName = playerName[0].toUpperCase() + playerName.slice(1);
+            alert( 'Thank you ' + playerName + '! Your score of '  + gameScore.attributes.score + ' has been saved.');
         },
         error: function(gameScore, error) {
             // Execute any logic that should take place if the save fails.
