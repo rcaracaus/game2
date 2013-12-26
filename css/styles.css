@@ -6,10 +6,6 @@ body {
     position: relative;
 }
 
-div {
-	position: absolute;
-}
-
 .startForm {
     position: relative;
 }
@@ -18,26 +14,29 @@ div.active {
 	cursor: pointer;
 }
 
-.target {
-	background: black;
+.target, .player {
+	position: absolute;
 }
 
 .player.active {
     outline: dashed 4px orange;
 }
 
-button {
-	position: absolute;
-	z-index: 1000;
-}
-
 .controls {
- right: 50px;
-    color: white;
+	position: absolute;
+	right: 50px;
+  color: white;
+	border-radius: 10px;	
+	background: grey;
+	border:solid 1px #333;
+	padding: 10px;
+	box-shadow: 0px 0px 5px #333333;
 }
 
-.controls div {
- padding: 10px;
- position: relative;
-    background: green;
+.controls-block {
+	position: relative;
+	border-radius: 10px;	
+	margin-bottom: 10px;
+	padding: 10px;
+	background: rgba(255,255,255, .2);
 }

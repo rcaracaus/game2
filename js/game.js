@@ -264,7 +264,7 @@ function startTimer() {
             return;
         }
 
-        document.getElementById("timer").innerHTML = count;
+        $(".timer").text(count);
     }
 }
 
