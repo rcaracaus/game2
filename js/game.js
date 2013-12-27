@@ -68,6 +68,9 @@ function createTargets(amount) {
 		var targetDiv = document.createElement( 'div' );
 		targetDiv.className = 'target poo1' + ' ' + targetRowClass;
         targetDiv.id = targetId;
+        targetDiv.style.width = w + "px";
+        targetDiv.style.height = w + "px";
+        targetDiv.style.top = -w + "px"; // Positions element offscreen initially
 		document.body.appendChild(targetDiv);
 	}
 }
@@ -123,6 +126,9 @@ function createPlayers(amount) {
         playerIdClass = 'player-' + playersCreated;
         var playerDiv = document.createElement( 'div' );
         playerDiv.className = 'player' + ' ' + playerIdClass;
+        playerDiv.style.width = w + "px";
+        playerDiv.style.height = w + "px";
+        playerDiv.style.top = -w + "px"; // Positions element offscreen initially
         document.body.appendChild(playerDiv);
         playersCreated++;
     }
@@ -135,8 +141,6 @@ function playerMove(i, x, y, vy) {
         elems[i].style.size = '100px';
         elems[i].style.top = y + "px";
         elems[i].style.left = x + "px";
-        elems[i].style.width = w + "px";
-        elems[i].style.height = w + "px";
     }
 
     /*
@@ -165,7 +169,7 @@ function animateFallTargets(element, i) {
 
     var elems = document.getElementsByClassName('target');
 
-    if (element.x + w < $(window).width() && element.y + w < $(window).height() + w) {
+    if (element.x + w < windowWidth && element.y + w < windowHeight + w) {
         element.y += element.vy;
     }
 
@@ -202,19 +206,15 @@ function addPlayer() {
 function setKeys(element, i) {
 
     $.fastKey('39', function() {
-        for (var i = 0; i < playerArray.length; i++) {
-            if(playerArray[i].selected) {
-                playerArray[i].x += 2;
-            }
-        }
+        playerArray.filter(function(item) {
+            return item.selected;
+        })[0].x += 2;
     });
 
     $.fastKey('37', function() {
-        for (var i = 0; i < playerArray.length; i++) {
-            if(playerArray[i].selected) {
-                playerArray[i].x -= 2;
-            }
-        }
+        playerArray.filter(function(item) {
+            return item.selected;
+        })[0].x -= 2;
     });
 
     selectedPlayer();

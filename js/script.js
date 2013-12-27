@@ -16,9 +16,6 @@ $(document).ready(function () {
         event.preventDefault();
     });
 
-    $( ".addNewPlayer" ).text(function() {
-        addNewPlayer();
-    });
 
 
 });
