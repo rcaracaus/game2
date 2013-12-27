@@ -16,15 +16,9 @@ $(document).ready(function () {
         event.preventDefault();
     });
 
-    $( ".yourHighScore" ).text(function() {
-        return localStorage.getItem('highScore');
+    $( ".addNewPlayer" ).text(function() {
+        addNewPlayer();
     });
-
-
-
-
-
-
 
 
 });

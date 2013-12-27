@@ -7,7 +7,6 @@ players = 2;
 playerArray = new Array();
 fps = 60;
 playersCreated = 0;
-playerSelected = false;
 resetRan = false;
 window.points = 0;
 
@@ -98,15 +97,16 @@ function targetMove(i, x, y, vy) {
 function resetTargetPosition(amount) {
     // Reset each target's position on each init.
     for (var i = 0; i < amount; i++) {
-        targetArray[i] = new Object();
-        targetArray[i].id = i;
-        targetArray[i].x = Math.floor(Math.random() * (windowWidth - w));
-        targetArray[i].y = 0 - w;
-        targetArray[i].width = w;
-        targetArray[i].height = w;
-        targetArray[i].vy = Math.random() + 0.5;
-        targetArray[i].isAlive = true;
-        targetArray[i].lowestY = false;
+        targetArray[i] = {
+            id: i,
+            x: Math.floor(Math.random() * (windowWidth - w)),
+            y: 0 - w,
+            width: w,
+            height: w,
+            vy: Math.random() + 0.5,
+            isAlive: true,
+            lowestY: false,
+        }
     }
 
 
@@ -151,12 +151,13 @@ function playerMove(i, x, y, vy) {
 function resetPlayerPosition(amount) {
     // Reset each player's position on each init.
     for (var i = 0; i < amount; i++) {
-        playerArray[i] = new Object();
-        playerArray[i].x = i * 100;
-        playerArray[i].y = windowHeight - w;
-        playerArray[i].width = w;
-        playerArray[i].height = w;
-        playerArray[i].selected = false;
+        playerArray[i] = {
+            "x": i *100,
+            "y": windowHeight - w,
+            "width": w,
+            "height": w,
+            "selected": true
+        }
     }
 }
 
@@ -188,6 +189,15 @@ function animateFallTargets(element, i) {
 }
 
 
+function addPlayer() {
+    playersCreated++;
+    playerIdClass = 'player-' + playersCreated;
+    var playerDiv = document.createElement( 'div' );
+    playerDiv.className = 'player' + ' ' + playerIdClass;
+    document.body.appendChild(playerDiv);
+}
+
+
 
 function setKeys(element, i) {
 
@@ -213,7 +223,8 @@ function setKeys(element, i) {
 
 function selectedPlayer() {
 
-    playerArray[0].selected = true;
+    var selected;
+    playerArray[1].selected = false;
     $('.player-0').addClass('active');
 
     document.body.onkeydown = function(event){
@@ -221,19 +232,19 @@ function selectedPlayer() {
         var keycode = event.charCode || event.keyCode;
         if(keycode === 9){
             event.preventDefault();
-            playerSelected = !playerSelected;
-            if (playerSelected) { playerArray[0].selected = true; playerArray[1].selected = false; }
-            else { playerArray[1].selected = true; playerArray[0].selected = false; }
+            playerArray[0].selected = !playerArray[0].selected;
+            playerArray[1].selected = !playerArray[1].selected;
+
             loop(playerArray, function(i) {
                 if (playerArray[i].selected) {
-                    $('.player-' + i).addClass('active');
+                    $('.player-' + i).toggleClass('active');
                 } else {
                     $('.player-' + i).removeClass('active');
                 }
             });
+
         }
     }
-
 }
 
 function intersects(player, target) {
