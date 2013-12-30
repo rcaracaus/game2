@@ -113,11 +113,9 @@ function animateFallTargets(element, i) {
 
     var elems = document.getElementsByClassName('target');
 
-    if (element.x + w < windowWidth && element.y + w < windowHeight + w) {
+    if (isInWindow(element)) {
         element.y += element.vy;
-    }
-
-    if (element.y > windowHeight) {
+    } else {
         elems[i].style.display = "block";
         element.isAlive = true;
         element.x = Math.floor(Math.random() * (windowWidth - w));
@@ -175,6 +173,10 @@ function intersects(player, target) {
         target.x <=  player.x + player.width &&
         player.y <= target.y + target.height &&
         target.y <= player.y + player.height);
+}
+
+function isInWindow(element) {
+    return (element.x + w < windowWidth && element.y + w < windowHeight + w);
 }
 
 function detectCollision() {
