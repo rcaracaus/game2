@@ -20,8 +20,8 @@ function init() {
     w = windowWidth / 30;
 
     clearInterval(refreshIntervalId);
-    createTargets(targets);
-    createPlayers(players);
+    createElements(targets, "target");
+    createElements(players, "player");
 
     // Target's position should reset on init.
     reset();
@@ -61,17 +61,17 @@ function reset() {
     resetPlayerPosition(players);
 }
 
-function createTargets(amount) {
+function createElements(amount, name) {
 	for (var i = 0; i < amount; i++) {
-		targetRowClass = 'target-row-' + i;
-		targetId = 'target-' + i;
-		var targetDiv = document.createElement( 'div' );
-		targetDiv.className = 'target poo1' + ' ' + targetRowClass;
-        targetDiv.id = targetId;
-        targetDiv.style.width = w + "px";
-        targetDiv.style.height = w + "px";
-        targetDiv.style.top = -w + "px"; // Positions element offscreen initially
-		document.body.appendChild(targetDiv);
+		RowClass = name + '-row-' + i;
+		targetId = name + '-' + i;
+		var div = document.createElement( 'div' );
+		div.className = name + ' poo1' + ' ' + targetId + " " + RowClass;
+        div.id = targetId;
+        div.style.width = w + "px";
+        div.style.height = w + "px";
+        div.style.top = -w + "px"; // Positions element offscreen initially
+		document.body.appendChild(div);
 	}
 }
 
@@ -89,12 +89,6 @@ function targetMove(i, x, y, vy) {
         elems[i].style.width = w + "px";
         elems[i].style.height = w + "px";
     }
-    /*
-     var elems = document.getElementsByClassName(targetWaveClass);
-     for(var i = 0; i < elems.length; i++) {
-     elems[i].style.top = (y - 100) + "px";
-     }
-     */
 }
 
 function resetTargetPosition(amount) {
@@ -120,20 +114,6 @@ function resetTargetPosition(amount) {
 
 }
 
-
-function createPlayers(amount) {
-    for (var i = 0; i < amount; i++) {
-        playerIdClass = 'player-' + playersCreated;
-        var playerDiv = document.createElement( 'div' );
-        playerDiv.className = 'player' + ' ' + playerIdClass;
-        playerDiv.style.width = w + "px";
-        playerDiv.style.height = w + "px";
-        playerDiv.style.top = -w + "px"; // Positions element offscreen initially
-        document.body.appendChild(playerDiv);
-        playersCreated++;
-    }
-}
-
 function playerMove(i, x, y, vy) {
     playerIdClass = 'player-' + i;
     var elems = document.getElementsByClassName(playerIdClass);
@@ -142,13 +122,6 @@ function playerMove(i, x, y, vy) {
         elems[i].style.top = y + "px";
         elems[i].style.left = x + "px";
     }
-
-    /*
-     var elems = document.getElementsByClassName(targetWaveClass);
-     for(var i = 0; i < elems.length; i++) {
-     elems[i].style.top = (y - 100) + "px";
-     }
-     */
 }
 
 
