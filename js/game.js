@@ -63,11 +63,10 @@ function reset() {
 
 function createElements(amount, name) {
 	for (var i = 0; i < amount; i++) {
-		RowClass = name + '-row-' + i;
-		targetId = name + '-' + i;
-		var div = document.createElement( 'div' );
-		div.className = name + ' poo1' + ' ' + targetId + " " + RowClass;
-        div.id = targetId;
+		div = document.createElement( 'div' );
+        div.rowClass = name + '-row-' + i;
+        div.id = name + '-' + i;
+		div.className = name + ' poo1' + ' ' + div.id + " " + div.rowClass;
         div.style.width = w + "px";
         div.style.height = w + "px";
         div.style.top = -w + "px"; // Positions element offscreen initially
@@ -81,6 +80,9 @@ function targetMove(i, x, y, vy) {
         y += vy;
     }
     targetRowClass = 'target-row-' + i;
+
+
+
     var elems = document.getElementsByClassName(targetRowClass);
     for(var i = 0; i < elems.length; i++) {
         elems[i].style.size = '100px';
@@ -88,6 +90,17 @@ function targetMove(i, x, y, vy) {
         elems[i].style.left = x + "px";
         elems[i].style.width = w + "px";
         elems[i].style.height = w + "px";
+    }
+}
+
+
+function playerMove(i, x, y, vy) {
+    playerIdClass = 'player-' + i;
+    var elems = document.getElementsByClassName(playerIdClass);
+    for(var i = 0; i < elems.length; i++) {
+        elems[i].style.size = '100px';
+        elems[i].style.top = y + "px";
+        elems[i].style.left = x + "px";
     }
 }
 
@@ -102,7 +115,7 @@ function resetTargetPosition(amount) {
             height: w,
             vy: Math.random() + 0.5,
             isAlive: true,
-            lowestY: false,
+            lowestY: false
         }
     }
 
@@ -114,15 +127,7 @@ function resetTargetPosition(amount) {
 
 }
 
-function playerMove(i, x, y, vy) {
-    playerIdClass = 'player-' + i;
-    var elems = document.getElementsByClassName(playerIdClass);
-    for(var i = 0; i < elems.length; i++) {
-        elems[i].style.size = '100px';
-        elems[i].style.top = y + "px";
-        elems[i].style.left = x + "px";
-    }
-}
+
 
 
 function resetPlayerPosition(amount) {
@@ -164,17 +169,6 @@ function animateFallTargets(element, i) {
         }
     });
 }
-
-
-function addPlayer() {
-    playersCreated++;
-    playerIdClass = 'player-' + playersCreated;
-    var playerDiv = document.createElement( 'div' );
-    playerDiv.className = 'player' + ' ' + playerIdClass;
-    document.body.appendChild(playerDiv);
-}
-
-
 
 function setKeys(element, i) {
 
