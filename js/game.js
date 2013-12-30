@@ -64,7 +64,6 @@ function reset() {
 function createElements(amount, name) {
 	for (var i = 0; i < amount; i++) {
 		div = document.createElement( 'div' );
-        div.rowClass = name + '-row-' + i;
         div.id = name + '-' + i;
 		div.className = name + ' poo1' + ' ' + div.id + " " + div.rowClass;
         div.style.width = w + "px";
@@ -75,33 +74,25 @@ function createElements(amount, name) {
 }
 
 function targetMove(i, x, y, vy) {
-
     if (x + w < windowWidth && y + w < windowHeight) {
         y += vy;
     }
-    targetRowClass = 'target-row-' + i;
+    var elem = document.getElementById('target-' + i);
+    elem.style.size = '100px';
+    elem.style.top = y + "px";
+    elem.style.left = x + "px";
+    elem.style.width = w + "px";
+    elem.style.height = w + "px";
 
-
-
-    var elems = document.getElementsByClassName(targetRowClass);
-    for(var i = 0; i < elems.length; i++) {
-        elems[i].style.size = '100px';
-        elems[i].style.top = y + "px";
-        elems[i].style.left = x + "px";
-        elems[i].style.width = w + "px";
-        elems[i].style.height = w + "px";
-    }
 }
 
 
 function playerMove(i, x, y, vy) {
-    playerIdClass = 'player-' + i;
-    var elems = document.getElementsByClassName(playerIdClass);
-    for(var i = 0; i < elems.length; i++) {
-        elems[i].style.size = '100px';
-        elems[i].style.top = y + "px";
-        elems[i].style.left = x + "px";
-    }
+    playerId = 'player-' + i;
+    var elem = document.getElementById(playerId);
+    elem.style.size = '100px';
+    elem.style.top = y + "px";
+    elem.style.left = x + "px";
 }
 
 function resetTargetPosition(amount) {
@@ -126,9 +117,6 @@ function resetTargetPosition(amount) {
      }
 
 }
-
-
-
 
 function resetPlayerPosition(amount) {
     // Reset each player's position on each init.
