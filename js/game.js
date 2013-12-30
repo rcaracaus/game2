@@ -34,15 +34,17 @@ function init() {
         targetArray.forEach( function(element, i) {
             animateFallTargets(element, i);
             // Prompt each target to fall separately.
-            elementMove("target", i,  targetArray[i].x, targetArray[i].y);
+            elementMove("target", i,  element.x, element.y);
         });
 
         playerArray.forEach( function(element, i) {
-            elementMove("player", i,  playerArray[i].x, playerArray[i].y);
+            elementMove("player", i,  element.x, element.y);
         });
+
+        detectCollision();
+
     });
 }
-
 
 function reset() {
     setLocalHighScore();
@@ -122,16 +124,6 @@ function animateFallTargets(element, i) {
         element.y = 0 - w;
     }
 
-    playerArray.forEach(function(player) {
-        if(intersects(player, element) && element.isAlive) {
-            window.points++;
-            document.getElementById("points").innerHTML = window.points;
-            element.isAlive = false;
-
-            var elem = document.getElementById('target-' + element.id);
-            elem.style.display = "none";
-        }
-    });
 }
 
 function setKeys(element, i) {
@@ -183,6 +175,21 @@ function intersects(player, target) {
         target.x <=  player.x + player.width &&
         player.y <= target.y + target.height &&
         target.y <= player.y + player.height);
+}
+
+function detectCollision() {
+    targetArray.forEach(function(element) {
+        playerArray.forEach(function(player) {
+            if(intersects(player, element) && element.isAlive) {
+                window.points++;
+                document.getElementById("points").innerHTML = window.points;
+                element.isAlive = false;
+
+                var elem = document.getElementById('target-' + element.id);
+                elem.style.display = "none";
+            }
+        });
+    });
 }
 
 function startTimer() {
