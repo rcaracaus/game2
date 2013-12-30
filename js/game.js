@@ -28,26 +28,17 @@ function init() {
     setKeys();
     
     // Start animation
-    animateTargets();
-    animatePlayers();
-}
 
-function animateTargets() {
-    refreshIntervalId = setInterval(function() {
+    animate( function() {
 
         targetArray.forEach( function(element, i) {
             animateFallTargets(element, i);
             // Prompt each target to fall separately.
-            targetMove(i, targetArray[i].x, targetArray[i].y, targetArray[i].vy);
+            elementMove("target", i,  targetArray[i].x, targetArray[i].y);
         });
 
-    }, 1000/fps);
-}
-
-function animatePlayers() {
-    refreshIntervalId = setInterval(function() {
         playerArray.forEach( function(element, i) {
-            playerMove(i, playerArray[i].x, playerArray[i].y, playerArray[i].vy);
+            elementMove("player", i,  playerArray[i].x, playerArray[i].y);
         });
     });
 }
@@ -73,23 +64,8 @@ function createElements(amount, name) {
 	}
 }
 
-function targetMove(i, x, y, vy) {
-    if (x + w < windowWidth && y + w < windowHeight) {
-        y += vy;
-    }
-    var elem = document.getElementById('target-' + i);
-    elem.style.size = '100px';
-    elem.style.top = y + "px";
-    elem.style.left = x + "px";
-    elem.style.width = w + "px";
-    elem.style.height = w + "px";
-
-}
-
-
-function playerMove(i, x, y, vy) {
-    playerId = 'player-' + i;
-    var elem = document.getElementById(playerId);
+function elementMove(name, i, x, y) {
+    var elem = document.getElementById(name + '-' + i);
     elem.style.size = '100px';
     elem.style.top = y + "px";
     elem.style.left = x + "px";
@@ -241,6 +217,10 @@ function setLocalHighScore() {
 
 function resetScore() {
   window.points = 0;
+}
+
+function animate(callback) {
+    refreshIntervalId = setInterval(callback, 1000/fps);
 }
 
 function loop(array, callback) {
