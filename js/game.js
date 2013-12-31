@@ -1,6 +1,5 @@
 /* Global Vars */
 var refreshIntervalId;
-
 domElements = {
     targets: {
         name: "target",
@@ -13,21 +12,16 @@ domElements = {
         items: new Array()
     }
 }
-
 fps = 60;
 window.points = 0;
-
 
 function init() {
     windowHeight = $(window).height();
     windowWidth = $(window).width();
     w = windowWidth / 30;
-
     startTimer();
     clearInterval(refreshIntervalId);
-
     createElements(domElements);
-
     // Target's position should reset on init.
     reset();
     setKeys(domElements);
@@ -35,7 +29,7 @@ function init() {
     animate(function() {
         animateTargets(domElements);
         elementMove(domElements);
-        detectCollision();
+        detectCollision(domElements);
     });
 }
 
@@ -52,8 +46,6 @@ function createElements(object) {
             object[index].items[i].id = object[index].name + '-' + i;
             object[index].items[i].x = Math.floor(Math.random() * (windowWidth - w));
             object[index].items[i].y = 0 - w;
-            object[index].items[i].width = w;
-            object[index].items[i].height = w;
             object[index].items[i].vy = Math.random() + 0.5;
             object[index].items[i].isAlive = true;
             object[index].items[i].lowestY = false;
@@ -67,24 +59,12 @@ function createElements(object) {
     }
 }
 
-function elementMove(object) {
-    for(var index in object) {
-        object[index].items.forEach( function(element, i) {
-            element.style.top = element.y + "px";
-            element.style.left = element.x + "px";
-        });
-    }
-}
-
-
 function animateTargets(domElements) {
     domElements.targets.items.forEach( function(element, i) {
-        var elems = document.getElementsByClassName('target');
 
         if (isInWindow(element)) {
             element.y += element.vy;
         } else {
-            elems[i].style.display = "block";
             element.isAlive = true;
             element.x = Math.floor(Math.random() * (windowWidth - w));
             element.y = 0 - w;
@@ -92,15 +72,30 @@ function animateTargets(domElements) {
     });
 }
 
-function setKeys(object) {
+/*
+ * Changes x and y coordinates attached to the dom element into absolute pixel values to avoid parsing.
+ */
+function elementMove(object) {
+    for(var index in object) {
+        object[index].items.forEach( function(element, i) {
+            element.style.top = element.y + "px";
+            element.style.left = element.x + "px";
+            if(element.isAlive == false) {
+                element.style.display = "none";
+            } else {
+                element.style.display = "block";
+            }
+        });
+    }
+}
 
+function setKeys(object) {
     object.players.items.forEach( function(element, i) {
         element.y = windowHeight - w;
     });
 
     // Right Key
     $.fastKey('39', function() {
-        console.log('left');
         object.players.items.filter(function(item) {
             return item.selected;
         })[0].x += 2;
@@ -142,26 +137,25 @@ function selectedPlayer(object) {
     }
 }
 
-function intersects(player, target) {
-    return (player.x <=  target.x + target.width &&
-        target.x <=  player.x + player.width &&
-        player.y <= target.y + target.height &&
-        target.y <= player.y + player.height);
-}
-
 function isInWindow(element) {
     return (element.x + w < windowWidth && element.y + w < windowHeight + w);
 }
 
-function detectCollision() {
-    domElements.targets.items.forEach(function(element) {
-        domElements.players.items.forEach(function(player) {
+function detectCollision(object) {
+
+    function intersects(player, target) {
+        return (player.x <=  target.x + w &&
+            target.x <=  player.x + w &&
+            player.y <= target.y + w &&
+            target.y <= player.y + w);
+    }
+
+    object.targets.items.forEach(function(element) {
+        object.players.items.forEach(function(player) {
             if(intersects(player, element) && element.isAlive) {
                 window.points++;
                 document.getElementById("points").innerHTML = window.points;
                 element.isAlive = false;
-                var elem = document.getElementById(element.id);
-                elem.style.display = "none";
             }
         });
     });
