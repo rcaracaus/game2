@@ -12,6 +12,7 @@ domElements = {
         items: new Array()
     }
 }
+
 fps = 60;
 window.points = 0;
 
@@ -43,8 +44,6 @@ function Element(name, i) {
     this.x = Math.floor(Math.random() * (windowWidth - w));
     this.y = 0 - w;
     this.vy = Math.random() + 0.5;
-    this.isAlive = true;
-    this.selected = true;
     this.element = document.createElement('div');
     this.element.id = name + '-' + i;
     this.element.className = name + ' poo1' + ' ';
@@ -52,6 +51,8 @@ function Element(name, i) {
     this.element.style.height = w + "px";
     this.element.style.top = -w + "px"; // Positions element offscreen initially
 }
+Element.prototype.isAlive = true;
+Element.prototype.selected = true;
 
 function createElements(domElements) {
     for(var index in domElements) {
