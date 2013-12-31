@@ -39,25 +39,29 @@ function reset() {
     startTimer();
 }
 
+
+function Element(name, i) {
+    this.x = Math.floor(Math.random() * (windowWidth - w));
+    this.y = 0 - w;
+    this.vy = Math.random() + 0.5;
+    this.isAlive = true;
+    this.selected = true;
+    this.element = document.createElement('div');
+    this.element.id = name + '-' + i;
+    this.element.className = name + ' poo1' + ' ';
+    this.element.style.width = w + "px";
+    this.element.style.height = w + "px";
+    this.element.style.top = -w + "px"; // Positions element offscreen initially
+}
+
 function createElements(object) {
     for(var index in object) {
         for (var i = 0; i < object[index].amount; i++) {
-            object[index].items[i] = document.createElement('div');
-            object[index].items[i].id = object[index].name + '-' + i;
-            object[index].items[i].x = Math.floor(Math.random() * (windowWidth - w));
-            object[index].items[i].y = 0 - w;
-            object[index].items[i].vy = Math.random() + 0.5;
-            object[index].items[i].isAlive = true;
-            object[index].items[i].selected = true;
-            object[index].items[i].className = object[index].name + ' poo1' + ' ';
-            object[index].items[i].style.width = w + "px";
-            object[index].items[i].style.height = w + "px";
-            object[index].items[i].style.top = -w + "px"; // Positions element offscreen initially
-            document.body.appendChild(object[index].items[i]);
+            object[index].items[i] = new Element(object[index].name, i);
+            document.body.appendChild(object[index].items[i].element);
         }
     }
 }
-
 
 function animateTargets(domElements) {
     domElements.targets.items.forEach( function(element, i) {
@@ -77,21 +81,21 @@ function animateTargets(domElements) {
  */
 function elementMove(object) {
     for(var index in object) {
-        object[index].items.forEach( function(element, i) {
-            element.style.top = element.y + "px";
-            element.style.left = element.x + "px";
-            if(element.isAlive == false) {
-                element.style.display = "none";
+        object[index].items.forEach( function(item, i) {
+            item.element.style.top = item.y + "px";
+            item.element.style.left = item.x + "px";
+            if(item.isAlive == false) {
+                item.element.style.display = "none";
             } else {
-                element.style.display = "block";
+                item.element.style.display = "block";
             }
         });
     }
 }
 
 function setKeys(object) {
-    object.players.items.forEach( function(element, i) {
-        element.y = windowHeight - w;
+    object.players.items.forEach( function(item, i) {
+        item.y = windowHeight - w;
     });
 
     // Right Key
@@ -137,8 +141,8 @@ function selectedPlayer(object) {
     }
 }
 
-function isInWindow(element) {
-    return (element.x + w < windowWidth && element.y + w < windowHeight + w);
+function isInWindow(item) {
+    return (item.x + w < windowWidth && item.y + w < windowHeight + w);
 }
 
 function detectCollision(object) {
@@ -150,12 +154,12 @@ function detectCollision(object) {
             target.y <= player.y + w);
     }
 
-    object.targets.items.forEach(function(element) {
+    object.targets.items.forEach(function(item) {
         object.players.items.forEach(function(player) {
-            if(intersects(player, element) && element.isAlive) {
+            if(intersects(player, item) && item.isAlive) {
                 window.points++;
                 document.getElementById("points").innerHTML = window.points;
-                element.isAlive = false;
+                item.isAlive = false;
             }
         });
     });
