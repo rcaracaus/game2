@@ -70,10 +70,8 @@ function createElements(object) {
 function elementMove(object) {
     for(var index in object) {
         object[index].items.forEach( function(element, i) {
-            var elem = document.getElementById(object[index].name + '-' + i);
-            elem.style.size = '100px';
-            elem.style.top = element.y + "px";
-            elem.style.left = element.x + "px";
+            element.style.top = element.y + "px";
+            element.style.left = element.x + "px";
         });
     }
 }
