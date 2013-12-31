@@ -39,7 +39,6 @@ function reset() {
     startTimer();
 }
 
-
 function Element(name, i) {
     this.x = Math.floor(Math.random() * (windowWidth - w));
     this.y = 0 - w;
@@ -54,11 +53,11 @@ function Element(name, i) {
     this.element.style.top = -w + "px"; // Positions element offscreen initially
 }
 
-function createElements(object) {
-    for(var index in object) {
-        for (var i = 0; i < object[index].amount; i++) {
-            object[index].items[i] = new Element(object[index].name, i);
-            document.body.appendChild(object[index].items[i].element);
+function createElements(domElements) {
+    for(var index in domElements) {
+        for (var i = 0; i < domElements[index].amount; i++) {
+            domElements[index].items[i] = new Element(domElements[index].name, i);
+            document.body.appendChild(domElements[index].items[i].element); // this could also be stored on the object later.
         }
     }
 }
@@ -79,9 +78,9 @@ function animateTargets(domElements) {
 /*
  * Changes x and y coordinates attached to the dom element into absolute pixel values to avoid parsing.
  */
-function elementMove(object) {
-    for(var index in object) {
-        object[index].items.forEach( function(item, i) {
+function elementMove(domElements) {
+    for(var index in domElements) {
+        domElements[index].items.forEach( function(item, i) {
             item.element.style.top = item.y + "px";
             item.element.style.left = item.x + "px";
             if(item.isAlive == false) {
@@ -93,32 +92,32 @@ function elementMove(object) {
     }
 }
 
-function setKeys(object) {
-    object.players.items.forEach( function(item, i) {
+function setKeys(domElements) {
+    domElements.players.items.forEach( function(item, i) {
         item.y = windowHeight - w;
     });
 
     // Right Key
     $.fastKey('39', function() {
-        object.players.items.filter(function(item) {
+        domElements.players.items.filter(function(item) {
             return item.selected;
         })[0].x += 2;
     });
 
     // Left Key
     $.fastKey('37', function() {
-        object.players.items.filter(function(item) {
+        domElements.players.items.filter(function(item) {
             return item.selected;
         })[0].x -= 2;
     });
 
-    selectedPlayer(object);
+    selectedPlayer(domElements);
 
 }
 
-function selectedPlayer(object) {
+function selectedPlayer(domElements) {
     var selected;
-    object.players.items[1].selected = false;
+    domElements.players.items[1].selected = false;
     $('#player-0').addClass('active');
 
     document.body.onkeydown = function(event){
@@ -126,11 +125,11 @@ function selectedPlayer(object) {
         var keycode = event.charCode || event.keyCode;
         if(keycode === 9){
             event.preventDefault();
-            object.players.items[0].selected = !object.players.items[0].selected;
-            object.players.items[1].selected = !object.players.items[1].selected;
+            domElements.players.items[0].selected = !domElements.players.items[0].selected;
+            domElements.players.items[1].selected = !domElements.players.items[1].selected;
 
-            loop(object.players.items, function(i) {
-                if (object.players.items[i].selected) {
+            loop(domElements.players.items, function(i) {
+                if (domElements.players.items[i].selected) {
                     $('#player-' + i).toggleClass('active');
                 } else {
                     $('#player-' + i).removeClass('active');
@@ -145,7 +144,7 @@ function isInWindow(item) {
     return (item.x + w < windowWidth && item.y + w < windowHeight + w);
 }
 
-function detectCollision(object) {
+function detectCollision(domElements) {
 
     function intersects(player, target) {
         return (player.x <=  target.x + w &&
@@ -154,8 +153,8 @@ function detectCollision(object) {
             target.y <= player.y + w);
     }
 
-    object.targets.items.forEach(function(item) {
-        object.players.items.forEach(function(player) {
+    domElements.targets.items.forEach(function(item) {
+        domElements.players.items.forEach(function(player) {
             if(intersects(player, item) && item.isAlive) {
                 window.points++;
                 document.getElementById("points").innerHTML = window.points;
