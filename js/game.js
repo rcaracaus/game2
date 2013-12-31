@@ -48,7 +48,6 @@ function createElements(object) {
             object[index].items[i].y = 0 - w;
             object[index].items[i].vy = Math.random() + 0.5;
             object[index].items[i].isAlive = true;
-            object[index].items[i].lowestY = false;
             object[index].items[i].selected = true;
             object[index].items[i].className = object[index].name + ' poo1' + ' ';
             object[index].items[i].style.width = w + "px";
@@ -58,6 +57,7 @@ function createElements(object) {
         }
     }
 }
+
 
 function animateTargets(domElements) {
     domElements.targets.items.forEach( function(element, i) {
