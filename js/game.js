@@ -198,3 +198,16 @@ function loop(array, callback) {
         callback(i);
     }
 }
+
+
+window.addEventListener("deviceorientation", function(e) {
+    if(e.gamma > 10) {
+        domElements.players.items.filter(function(item) {
+            return item.element.classList.contains('selected');
+        })[0].x += (e.gamma * .2);
+    } else if(e.gamma < -10) {
+        domElements.players.items.filter(function(item) {
+            return item.element.classList.contains('selected');
+        })[0].x -= (e.gamma * -.2);
+    }
+}, true);
