@@ -1,38 +1,50 @@
+/* line 3, ../scss/styles.scss */
 body {
-    overflow: hidden;
+  overflow: hidden;
 }
 
+/* line 7, ../scss/styles.scss */
 .wrapper {
-    position: relative;
+  position: relative;
 }
 
+/* line 11, ../scss/styles.scss */
 .startForm {
-    position: relative;
+  position: relative;
 }
 
+/* line 15, ../scss/styles.scss */
+div.active {
+  cursor: pointer;
+}
+
+/* line 19, ../scss/styles.scss */
 .target, .player {
-	position: absolute;
+  position: absolute;
 }
 
-.player.selected {
-    outline: dashed 4px orange;
+/* line 23, ../scss/styles.scss */
+.player.active {
+  outline: dashed 4px orange;
 }
 
+/* line 27, ../scss/styles.scss */
 .controls {
-	position: absolute;
-	right: 50px;
+  position: absolute;
+  right: 50px;
   color: white;
-	border-radius: 10px;	
-	background: grey;
-	border:solid 1px #333;
-	padding: 10px;
-	box-shadow: 0px 0px 5px #333333;
+  border-radius: 10px;
+  background: grey;
+  border: solid 1px #333;
+  padding: 10px;
+  box-shadow: 0px 0px 5px #333333;
 }
 
+/* line 38, ../scss/styles.scss */
 .controls-block {
-	position: relative;
-	border-radius: 10px;	
-	margin-bottom: 10px;
-	padding: 10px;
-	background: rgba(255,255,255, .2);
+  position: relative;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.2);
 }
