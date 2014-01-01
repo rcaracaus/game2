@@ -14,7 +14,7 @@ body {
 }
 
 /* line 15, ../scss/styles.scss */
-div.active {
+div.selected {
   cursor: pointer;
 }
 
@@ -24,7 +24,7 @@ div.active {
 }
 
 /* line 23, ../scss/styles.scss */
-.player.active {
+.player.selected {
   outline: dashed 4px orange;
 }
 

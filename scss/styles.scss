@@ -12,7 +12,7 @@ body {
     position: relative;
 }
 
-div.active {
+div.selected {
 	cursor: pointer;
 }
 
@@ -20,7 +20,7 @@ div.active {
 	position: absolute;
 }
 
-.player.active {
+.player.selected {
     outline: dashed 4px orange;
 }
 
