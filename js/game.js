@@ -52,7 +52,6 @@ function Element(name, i) {
     this.element.style.top = -w + "px"; // Positions element offscreen initially
 }
 Element.prototype.isAlive = true;
-Element.prototype.selected = true;
 
 function createElements(domElements) {
     for(var index in domElements) {
@@ -101,14 +100,14 @@ function setKeys(domElements) {
     // Right Key
     $.fastKey('39', function() {
         domElements.players.items.filter(function(item) {
-            return item.selected;
+            return item.element.classList.contains('selected');
         })[0].x += 2;
     });
 
     // Left Key
     $.fastKey('37', function() {
         domElements.players.items.filter(function(item) {
-            return item.selected;
+            return item.element.classList.contains('selected');
         })[0].x -= 2;
     });
 
@@ -117,24 +116,16 @@ function setKeys(domElements) {
 }
 
 function selectedPlayer(domElements) {
-    var selected;
-    domElements.players.items[1].selected = false;
-    $('#player-0').addClass('active');
+    document.getElementById("player-0").classList.add('selected');
 
     document.body.onkeydown = function(event){
         event = event || window.event;
         var keycode = event.charCode || event.keyCode;
         if(keycode === 9){
             event.preventDefault();
-            domElements.players.items[0].selected = !domElements.players.items[0].selected;
-            domElements.players.items[1].selected = !domElements.players.items[1].selected;
 
             loop(domElements.players.items, function(i) {
-                if (domElements.players.items[i].selected) {
-                    $('#player-' + i).toggleClass('active');
-                } else {
-                    $('#player-' + i).removeClass('active');
-                }
+              document.getElementById("player-"+ i).classList.toggle('selected');
             });
 
         }
