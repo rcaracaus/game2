@@ -16,7 +16,10 @@ $(document).ready(function () {
         event.preventDefault();
     });
 
-
+    $( ".addNewPlayer" ).click(function(e) {
+        domElements.classify('players', 'toilet1');
+        e.preventDefault();
+    });
 
 });
 
