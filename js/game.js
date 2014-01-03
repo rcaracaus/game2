@@ -44,12 +44,10 @@ function reset() {
 
 function Element(name, i) {
     this.x = Math.floor(Math.random() * (windowWidth - w));
-    this.y = 0 - w;
     this.vy = Math.random() + 0.5;
     this.element = document.createElement('div');
     this.element.id = name + '-' + i;
     this.element.className = name;
-    this.element.style.top = -w + "px"; // Positions element offscreen initially
 }
 Element.prototype.isAlive = true;
 
@@ -93,9 +91,6 @@ function elementMove(domElements) {
 }
 
 function setKeys(domElements) {
-    domElements.players.items.forEach( function(item, i) {
-        item.y = windowHeight - w;
-    });
 
     // Right Key
     $.fastKey('39', function() {
@@ -139,15 +134,21 @@ function isInWindow(item) {
 function detectCollision(domElements) {
 
     function intersects(player, target) {
+
+        //player.x = player.element.getBoundingClientRect().left;
+        y = player.element.getBoundingClientRect().top;
+        //player.width = player.element.getBoundingClientRect().width;
+        //player.height = player.element.getBoundingClientRect().height;
+
         return (player.x <=  target.x + target.width &&
             target.x <=  player.x + player.width &&
-            player.y <= target.y + target.height &&
-            target.y <= player.y + player.height);
+            y <= target.y + target.height &&
+            target.y <= y + player.height);
     }
 
     domElements.targets.items.forEach(function(item) {
         domElements.players.items.forEach(function(player) {
-            console.log(player.width);
+            
             if(intersects(player, item) && item.isAlive) {
                 window.points++;
                 document.getElementById("points").innerHTML = window.points;
@@ -219,4 +220,9 @@ window.addEventListener("deviceorientation", function(e) {
             return item.element.classList.contains('selected');
         })[0].x -= (e.gamma * -.2);
     }
+}, true);
+
+window.addEventListener('resize', function() {
+    windowHeight = $(window).height();
+    windowWidth = $(window).width();
 }, true);
