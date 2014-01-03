@@ -21,6 +21,10 @@ $(document).ready(function () {
   		$(".controls").toggleClass("active");
 		});
 
+    $( ".addNewPlayer" ).click(function(e) {
+        domElements.classify('players', 'toilet1');
+        e.preventDefault();
+    });
 });
 
 

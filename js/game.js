@@ -23,6 +23,8 @@ function init() {
     startTimer();
     clearInterval(refreshIntervalId);
     createElements(domElements);
+    classify(domElements, 'targets', 'poo1');
+    classify(domElements, 'players', 'player');
     // Target's position should reset on init.
     reset();
     setKeys(domElements);
@@ -46,9 +48,7 @@ function Element(name, i) {
     this.vy = Math.random() + 0.5;
     this.element = document.createElement('div');
     this.element.id = name + '-' + i;
-    this.element.className = name + ' poo1' + ' ';
-    this.element.style.width = w + "px";
-    this.element.style.height = w + "px";
+    this.element.className = name;
     this.element.style.top = -w + "px"; // Positions element offscreen initially
 }
 Element.prototype.isAlive = true;
@@ -139,14 +139,15 @@ function isInWindow(item) {
 function detectCollision(domElements) {
 
     function intersects(player, target) {
-        return (player.x <=  target.x + w &&
-            target.x <=  player.x + w &&
-            player.y <= target.y + w &&
-            target.y <= player.y + w);
+        return (player.x <=  target.x + target.width &&
+            target.x <=  player.x + player.width &&
+            player.y <= target.y + target.height &&
+            target.y <= player.y + player.height);
     }
 
     domElements.targets.items.forEach(function(item) {
         domElements.players.items.forEach(function(player) {
+            console.log(player.width);
             if(intersects(player, item) && item.isAlive) {
                 window.points++;
                 document.getElementById("points").innerHTML = window.points;
@@ -197,6 +198,14 @@ function loop(array, callback) {
     for (var i = 0; i < array.length; i++) {
         callback(i);
     }
+}
+
+function classify(domElements, type, classification) {
+    domElements[type].items.forEach(function (item){
+        item.element.classList.add(classification);
+        item.width = item.element.offsetWidth;
+        item.height = item.element.offsetHeight;
+    });
 }
 
 
