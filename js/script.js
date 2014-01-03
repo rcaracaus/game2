@@ -17,6 +17,9 @@ $(document).ready(function () {
     });
 
 
+		$(".icon").click(function() {
+  		$(".controls").toggleClass("active");
+		});
 
 });
 
