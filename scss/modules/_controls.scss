@@ -1,0 +1,48 @@
+.controls {
+	display: none;
+	@include breakpoint(600px) { 
+		display: block;
+	}
+}
+
+.icon {
+	background: black;
+	color: white;
+	padding: 5px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	display: block;
+	float: right;
+	@include breakpoint(600px) {
+		display: none;
+	}
+}
+
+.active {
+	display: block;
+}
+	
+	.startForm {
+	    position: relative;
+	}
+
+	.controls {
+		position: absolute;
+		right: 50px;
+	  color: white;
+		border-radius: 10px;	
+		background: grey;
+		border:solid 1px #333;
+		padding: 10px;
+		box-shadow: 0px 0px 5px #333333;
+	}
+
+	.controls-block {
+		position: relative;
+		border-radius: 10px;	
+		margin-bottom: 10px;
+		padding: 10px;
+		background: rgba(255,255,255, .2);
+	}
+
