@@ -1,16 +1,5 @@
-@import "compass";
-
-body {
-    overflow: hidden;
-}
-
-.wrapper {
-    position: relative;
-}
-
-.startForm {
-    position: relative;
-}
+@import "base";
+@import "reset";
 
 div.selected {
 	cursor: pointer;
@@ -31,7 +20,7 @@ div.selected {
 .controls {
 	position: absolute;
 	right: 50px;
-  color: white;
+  	color: white;
 	border-radius: 10px;	
 	background: grey;
 	border:solid 1px #333;
@@ -39,10 +28,4 @@ div.selected {
 	box-shadow: 0px 0px 5px #333333;
 }
 
-.controls-block {
-	position: relative;
-	border-radius: 10px;	
-	margin-bottom: 10px;
-	padding: 10px;
-	background: rgba(255,255,255, .2);
-}
+@import "modules/controls";

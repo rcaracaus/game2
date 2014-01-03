@@ -16,11 +16,15 @@ $(document).ready(function () {
         event.preventDefault();
     });
 
+
+		$(".icon").click(function() {
+  		$(".controls").toggleClass("active");
+		});
+
     $( ".addNewPlayer" ).click(function(e) {
         domElements.classify('players', 'toilet1');
         e.preventDefault();
     });
-
 });
 
 
