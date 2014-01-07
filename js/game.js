@@ -44,7 +44,7 @@ function reset() {
 
 function Element(name, i) {
     this.x = Math.floor(Math.random() * (windowWidth - w));
-    this.vy = Math.random() + 0.5;
+    this.vy = (Math.random() + 0.5) * (windowHeight / 600);
     this.element = document.createElement('img');
     this.element.id = name + '-' + i;
     this.element.className = name;
@@ -96,14 +96,14 @@ function setKeys(domElements) {
     $.fastKey('39', function() {
         domElements.players.items.filter(function(item) {
             return item.element.classList.contains('selected');
-        })[0].x += 2;
+        })[0].x += 2 * (windowWidth / 1300);
     });
 
     // Left Key
     $.fastKey('37', function() {
         domElements.players.items.filter(function(item) {
             return item.element.classList.contains('selected');
-        })[0].x -= 2;
+        })[0].x -= 2 * (windowWidth / 1300);
     });
 
     selectedPlayer(domElements);
