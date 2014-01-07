@@ -45,7 +45,7 @@ function reset() {
 function Element(name, i) {
     this.x = Math.floor(Math.random() * (windowWidth - w));
     this.vy = Math.random() + 0.5;
-    this.element = document.createElement('div');
+    this.element = document.createElement('img');
     this.element.id = name + '-' + i;
     this.element.className = name;
 }
@@ -134,11 +134,16 @@ function isInWindow(item) {
 function detectCollision(domElements) {
 
     function intersects(player, target) {
-
-        //player.x = player.element.getBoundingClientRect().left;
+        
         y = player.element.getBoundingClientRect().top;
-        //player.width = player.element.getBoundingClientRect().width;
-        //player.height = player.element.getBoundingClientRect().height;
+
+        target.width = target.element.getBoundingClientRect().width;
+        target.height = target.element.getBoundingClientRect().height;
+
+        player.width = target.element.getBoundingClientRect().width;
+        player.height = target.element.getBoundingClientRect().height;
+
+        console.log(target.element.getBoundingClientRect().top);
 
         return (player.x <=  target.x + target.width &&
             target.x <=  player.x + player.width &&

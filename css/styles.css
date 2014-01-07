@@ -18,27 +18,39 @@ body {
   position: relative;
 }
 
-/* line 4, ../scss/styles.scss */
+/* line 1, ../scss/_skins.scss */
+.poo1 {
+  content: url("../images/poo1.png");
+  width: 5%;
+}
+
+/* line 6, ../scss/_skins.scss */
+.player {
+  content: url("../images/toilet.png");
+  width: 5%;
+}
+
+/* line 5, ../scss/styles.scss */
 div.selected {
   cursor: pointer;
 }
 
-/* line 8, ../scss/styles.scss */
+/* line 9, ../scss/styles.scss */
 .target, .player {
   position: absolute;
 }
 
-/* line 12, ../scss/styles.scss */
+/* line 13, ../scss/styles.scss */
 .player.selected {
   outline: dashed 4px orange;
 }
 
-/* line 16, ../scss/styles.scss */
+/* line 17, ../scss/styles.scss */
 .player {
   bottom: 0px;
 }
 
-/* line 20, ../scss/styles.scss */
+/* line 21, ../scss/styles.scss */
 .controls {
   position: absolute;
   right: 50px;
