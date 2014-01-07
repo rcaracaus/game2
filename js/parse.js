@@ -1,6 +1,3 @@
-
-
-
 function saveHighScore() {
 
     Parse.initialize("Wzt7lQJYvLRdYBc9D1C2ARbUFEUEd4N8eNP4e1rP", "iX28bQkGJqMq3pa8qDl3xkKDdHcaoQnLvl36BQEf");
@@ -56,7 +53,7 @@ function getHighScores() {
         }
     });
 
-}
+} 
 
 
 
