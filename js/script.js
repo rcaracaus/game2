@@ -10,7 +10,6 @@ $(document).ready(function () {
 
     $( "#start" ).submit(function( event ) {
         name = document.getElementById("input-name").value;
-
         localStorage.setItem('name', name);
         init();
         event.preventDefault();

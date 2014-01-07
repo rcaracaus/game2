@@ -1,7 +1,11 @@
-Parse.initialize("Wzt7lQJYvLRdYBc9D1C2ARbUFEUEd4N8eNP4e1rP", "iX28bQkGJqMq3pa8qDl3xkKDdHcaoQnLvl36BQEf");
+
 
 
 function saveHighScore() {
+
+    Parse.initialize("Wzt7lQJYvLRdYBc9D1C2ARbUFEUEd4N8eNP4e1rP", "iX28bQkGJqMq3pa8qDl3xkKDdHcaoQnLvl36BQEf");
+
+    $.getScript('/javascripts/contacts.js');
 
     var name = localStorage.getItem('name');
     var highScore = localStorage.getItem('highScore');
@@ -31,6 +35,7 @@ function saveHighScore() {
 
 
 function getHighScores() {
+    Parse.initialize("Wzt7lQJYvLRdYBc9D1C2ARbUFEUEd4N8eNP4e1rP", "iX28bQkGJqMq3pa8qDl3xkKDdHcaoQnLvl36BQEf");
     var GameScore = Parse.Object.extend("GameScore");
     var query = new Parse.Query(GameScore);
     query.descending("score");
