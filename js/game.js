@@ -111,20 +111,32 @@ function setKeys(domElements) {
 }
 
 function selectedPlayer(domElements) {
-    document.getElementById("player-0").classList.add('selected');
 
-    document.body.onkeydown = function(event){
-        event = event || window.event;
-        var keycode = event.charCode || event.keyCode;
-        if(keycode === 9){
-            event.preventDefault();
+  document.getElementById("player-0").classList.add('selected');
 
-            loop(domElements.players.items, function(i) {
-              document.getElementById("player-"+ i).classList.toggle('selected');
-            });
+  document.body.onkeydown = function(event){
+      event = event || window.event;
+      var keycode = event.charCode || event.keyCode;
+      if(keycode === 9){
+          event.preventDefault();
 
-        }
-    }
+          loop(domElements.players.items, function(i) {
+            document.getElementById("player-"+ i).classList.toggle('selected');
+          });
+
+      }
+  }
+
+  document.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    var touch = e.touches[0];
+
+    loop(domElements.players.items, function(i) {
+      document.getElementById("player-"+ i).classList.toggle('selected');
+    });
+
+  }, false);
+
 }
 
 function isInWindow(item) {
@@ -142,8 +154,6 @@ function detectCollision(domElements) {
 
         player.width = target.element.getBoundingClientRect().width;
         player.height = target.element.getBoundingClientRect().height;
-
-        console.log(target.element.getBoundingClientRect().top);
 
         return (player.x <=  target.x + target.width &&
             target.x <=  player.x + player.width &&
