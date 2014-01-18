@@ -1,0 +1,15 @@
+div.selected {
+	cursor: pointer;
+}
+
+.target, .player {
+	position: absolute;
+}
+
+.player.selected {
+    outline: dashed 4px orange;
+}
+
+.player {
+	bottom: 0px;
+}

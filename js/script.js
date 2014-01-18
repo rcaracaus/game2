@@ -18,7 +18,12 @@ $(document).ready(function () {
 
 		$(".icon").click(function() {
   		$(".controls").toggleClass("active");
+			if ($(this).text() == "options")
+       	$(this).text("game")
+    	else
+       	$(this).text("options");
 		});
+	
 
     $( ".addNewPlayer" ).click(function(e) {
         domElements.classify('players', 'toilet1');
