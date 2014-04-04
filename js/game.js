@@ -263,24 +263,26 @@ function playerInput(domElements, dt) {
     var element = getSelected(domElements);
     
     if (deviceGamma !== null) {
-        element.x += deviceGamma * (windowWidth / 1300) * dt;
-    } else {
-        // Right Key
-        if(keys['right']) {
-            if (element.x < windowWidth - element.width) {
-              element.x += 200 * (windowWidth / 1300) * dt;
-            } else {
-              element.x = windowWidth - element.width;
-            }
+        if (deviceGamma > 10) {
+            element.x += deviceGamma * 10 * (windowWidth / 1300) * dt;
         }
+    }
 
-        // Left Key
-        if(keys['left']) {
-            if (element.x > 0) {
-              element.x -= 200 * (windowWidth / 1300) * dt;
-            } else {
-              element.x = 0;
-            }
+    // Right Key
+    if(keys['right']) {
+        if (element.x < windowWidth - element.width) {
+          element.x += 200 * (windowWidth / 1300) * dt;
+        } else {
+          element.x = windowWidth - element.width;
+        }
+    }
+
+    // Left Key
+    if(keys['left']) {
+        if (element.x > 0) {
+          element.x -= 200 * (windowWidth / 1300) * dt;
+        } else {
+          element.x = 0;
         }
     }
 }
