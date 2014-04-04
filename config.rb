@@ -15,6 +15,8 @@ images_dir = "images"
 javascripts_dir = "js"
 environment = :development
 relative_assets = true
+
+require 'sass-globbing'
 require 'breakpoint'
 require 'sassy-buttons'
 
