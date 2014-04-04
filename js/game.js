@@ -277,13 +277,18 @@ window.addEventListener("deviceorientation", function(e) {
     if(e.gamma > 10) {
         var element = getSelected(domElements);
         if (element.x < windowWidth - element.width) {
-            element.x += (2 * (windowWidth / 1300));
+          keys['right'] = true;
+          keys['left'] = false;
         }
     } else if(e.gamma < -10) {
         var element = getSelected(domElements);
         if (element.x > 0) {
-            element.x -= (2 * (windowWidth / 1300));
+          keys['right'] = false;
+          keys['left'] = true;
         }
+    } else {
+      keys['right'] = false;
+      keys['left'] = false;
     }
 }, true);
 
