@@ -1,6 +1,6 @@
 /* Global Vars */
 var refreshIntervalId;
-var deviceAlpha = null;
+var deviceGamma = null;
 domElements = {
     targets: {
         name: "target",
@@ -189,7 +189,7 @@ function setLocalHighScore() {
     } else if ( window.points > localStorage.getItem('highScore')) {
         localStorage.setItem('highScore', window.points);
     }
-    $( ".yourHighScore" ).text(function() {
+    $(".yourHighScore").text(function() {
         return localStorage.getItem('highScore');
     });
 }
@@ -263,7 +263,7 @@ function playerInput(domElements, dt) {
     var element = getSelected(domElements);
     
     if (deviceAlpha !== null) {
-        element.x += deviceAlpha
+        element.x += deviceGamma * (windowWidth / 1300) * dt;
     } else {
         // Right Key
         if(keys['right']) {
@@ -286,7 +286,7 @@ function playerInput(domElements, dt) {
 }
 
 window.addEventListener("deviceorientation", function(e) {
-    deviceAlpha = e.alpha;
+    deviceGamma = e.gamma;
 }, true);
 
 window.addEventListener('resize', function() {
