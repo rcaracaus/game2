@@ -95,9 +95,7 @@ function setKeys(domElements) {
     // Right Key
     $.fastKey('39', function() {
 
-        var element = domElements.players.items.filter(function(item) {
-            return item.element.classList.contains('selected');
-        })[0];
+        var element = getSelected(domElements);
         if (element.x < windowWidth - element.width) {
             element.x += 2 * (windowWidth / 1300);
         } else {
@@ -109,9 +107,7 @@ function setKeys(domElements) {
     // Left Key
     $.fastKey('37', function() {
 
-        var element = domElements.players.items.filter(function(item) {
-            return item.element.classList.contains('selected');
-        })[0];
+        var element = getSelected(domElements);
         if (element.x > 0) {
             element.x -= 2 * (windowWidth / 1300);
         } else {
@@ -242,24 +238,18 @@ function classify(domElements, type, classification) {
  *  Get selected player from domElements array.
  */
 function getSelected(domElements) {
-    domElements.players.items.filter(function(item) {
-            return item.element.classList.contains('selected');
-    })[0];
+    return domElements.players.items.filter(function(item) {return item.element.classList.contains('selected');})[0];
 }
 
 
 window.addEventListener("deviceorientation", function(e) {
     if(e.gamma > 10) {
-        var element = domElements.players.items.filter(function(item) {
-            return item.element.classList.contains('selected');
-        })[0];
+        var element = getSelected(domElements);
         if (element.x < windowWidth - element.width) {
             element.x += (e.gamma * .2);
         }
     } else if(e.gamma < -10) {
-        var element = domElements.players.items.filter(function(item) {
-            return item.element.classList.contains('selected');
-        })[0];
+        var element = getSelected(domElements);
         if (element.x > 0) {
             element.x -= (e.gamma * .2);
         }
