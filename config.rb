@@ -15,8 +15,11 @@ images_dir = "images"
 javascripts_dir = "js"
 environment = :development
 relative_assets = true
+
+require 'sass-globbing'
 require 'breakpoint'
 require 'sassy-buttons'
+require 'singularitygs'
 
 # 3. You can select your preferred output style here (can be overridden via the command line):
 output_style = :expanded

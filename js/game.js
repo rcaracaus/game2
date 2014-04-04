@@ -8,7 +8,7 @@ domElements = {
     },
     players: {
         name: "player",
-        amount: 2,
+        amount: 3,
         items: new Array()
     }
 }
@@ -130,7 +130,7 @@ function selectedPlayer(domElements) {
   document.addEventListener('touchstart', function(e) {
     e.preventDefault();
     var touch = e.touches[0];
-
+		
     loop(domElements.players.items, function(i) {
       document.getElementById("player-"+ i).classList.toggle('selected');
     });
