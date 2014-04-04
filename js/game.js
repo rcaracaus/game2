@@ -1,5 +1,6 @@
 /* Global Vars */
 var refreshIntervalId;
+var deviceAlpha = null;
 domElements = {
     targets: {
         name: "target",
@@ -30,12 +31,20 @@ function init() {
     reset();
     setKeys(domElements);
     // Start animation
-    animate(function() {
-        animateTargets(domElements);
-        playerInput(domElements);
-        elementMove(domElements);
-        detectCollision(domElements);
-    });
+
+    lastTime = Date.now() / 1000;
+    refreshIntervalId = setInterval(update, 1000/fps);
+}
+
+function update() {
+    var now = Date.now() / 1000;
+    var dt = now - lastTime;
+    lastTime = Date.now() / 1000;
+
+    animateTargets(domElements, dt);
+    playerInput(domElements, dt);
+    elementMove(domElements);
+    detectCollision(domElements);
 }
 
 function reset() {
@@ -46,7 +55,7 @@ function reset() {
 
 function Element(name, i) {
     this.x = Math.floor(Math.random() * (windowWidth - w));
-    this.vy = (Math.random() + 0.5) * (windowHeight / 600);
+    this.vy = (Math.random() + 0.5) * (windowHeight / 600) * 100;
     this.element = document.createElement('img');
     this.element.id = name + '-' + i;
     this.element.className = name;
@@ -62,11 +71,11 @@ function createElements(domElements) {
     }
 }
 
-function animateTargets(domElements) {
+function animateTargets(domElements, dt) {
     domElements.targets.items.forEach( function(element, i) {
 
         if (isInWindow(element)) {
-            element.y += element.vy;
+            element.y += element.vy * dt;
         } else {
             element.isAlive = true;
             element.x = Math.floor(Math.random() * (windowWidth - w));
@@ -189,10 +198,6 @@ function resetScore() {
   window.points = 0;
 }
 
-function animate(callback) {
-    refreshIntervalId = setInterval(callback, 1000/fps);
-}
-
 function loop(array, callback) {
     for (var i = 0; i < array.length; i++) {
         callback(i);
@@ -253,43 +258,35 @@ function setKeys(domElements) {
 /*
  * Calculate whether player input should move toilets.
  */
-function playerInput(domElements) {
-  // Right Key
-  var element = getSelected(domElements);
-  if(keys['right']) {
-    if (element.x < windowWidth - element.width) {
-      element.x += 2 * (windowWidth / 1300);
+function playerInput(domElements, dt) {
+
+    var element = getSelected(domElements);
+    
+    if (deviceAlpha !== null) {
+        element.x += deviceAlpha
     } else {
-      element.x = windowWidth - element.width;
+        // Right Key
+        if(keys['right']) {
+            if (element.x < windowWidth - element.width) {
+              element.x += 200 * (windowWidth / 1300) * dt;
+            } else {
+              element.x = windowWidth - element.width;
+            }
+        }
+
+        // Left Key
+        if(keys['left']) {
+            if (element.x > 0) {
+              element.x -= 200 * (windowWidth / 1300) * dt;
+            } else {
+              element.x = 0;
+            }
+        }
     }
-  }
-  if(keys['left']) {
-    // Left Key
-    if (element.x > 0) {
-      element.x -= 2 * (windowWidth / 1300);
-    } else {
-      element.x = 0;
-    }
-  }
 }
 
 window.addEventListener("deviceorientation", function(e) {
-    if(e.gamma > 10) {
-        var element = getSelected(domElements);
-        if (element.x < windowWidth - element.width) {
-          keys['right'] = true;
-          keys['left'] = false;
-        }
-    } else if(e.gamma < -10) {
-        var element = getSelected(domElements);
-        if (element.x > 0) {
-          keys['right'] = false;
-          keys['left'] = true;
-        }
-    } else {
-      keys['right'] = false;
-      keys['left'] = false;
-    }
+    deviceAlpha = e.alpha;
 }, true);
 
 window.addEventListener('resize', function() {
