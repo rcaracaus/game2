@@ -95,7 +95,9 @@ function setKeys(domElements) {
     // Right Key
     $.fastKey('39', function() {
 
-        var element = getSelected(domElements);
+        var element = domElements.players.items.filter(function(item) {
+            return item.element.classList.contains('selected');
+        })[0];
         if (element.x < windowWidth - element.width) {
             element.x += 2 * (windowWidth / 1300);
         } else {
@@ -107,7 +109,9 @@ function setKeys(domElements) {
     // Left Key
     $.fastKey('37', function() {
 
-        var element = getSelected(domElements);
+        var element = domElements.players.items.filter(function(item) {
+            return item.element.classList.contains('selected');
+        })[0];
         if (element.x > 0) {
             element.x -= 2 * (windowWidth / 1300);
         } else {
@@ -246,12 +250,16 @@ function getSelected(domElements) {
 
 window.addEventListener("deviceorientation", function(e) {
     if(e.gamma > 10) {
-        var element = getSelected(domElements);
+        var element = domElements.players.items.filter(function(item) {
+            return item.element.classList.contains('selected');
+        })[0];
         if (element.x < windowWidth - element.width) {
             element.x += (e.gamma * .2);
         }
     } else if(e.gamma < -10) {
-        var element = getSelected(domElements);
+        var element = domElements.players.items.filter(function(item) {
+            return item.element.classList.contains('selected');
+        })[0];
         if (element.x > 0) {
             element.x -= (e.gamma * .2);
         }
