@@ -267,7 +267,7 @@ function playerInput(domElements, dt) {
             if (element.x < windowWidth - element.width) {
                 element.x += deviceGamma * 10 * (windowWidth / 1300) * dt;
             } else {
-                element.x = windowWidth;
+                element.x = windowWidth - element.width;
             }
         }
         if (deviceGamma < -10) {
