@@ -15,6 +15,7 @@ domElements = {
 
 fps = 60;
 window.points = 0;
+keys = [];
 
 function init() {
     windowHeight = $(window).height();
@@ -31,6 +32,7 @@ function init() {
     // Start animation
     animate(function() {
         animateTargets(domElements);
+        playerInput(domElements);
         elementMove(domElements);
         detectCollision(domElements);
     });
@@ -90,35 +92,6 @@ function elementMove(domElements) {
     }
 }
 
-function setKeys(domElements) {
-
-    // Right Key
-    $.fastKey('39', function() {
-
-        var element = getSelected(domElements);
-        if (element.x < windowWidth - element.width) {
-            element.x += 2 * (windowWidth / 1300);
-        } else {
-            element.x = windowWidth - element.width;
-        }
-
-    });
-
-    // Left Key
-    $.fastKey('37', function() {
-
-        var element = getSelected(domElements);
-        if (element.x > 0) {
-            element.x -= 2 * (windowWidth / 1300);
-        } else {
-            element.x = 0;
-        } 
-
-    });
-
-    selectedPlayer(domElements);
-
-}
 
 function selectedPlayer(domElements) {
 
@@ -241,17 +214,75 @@ function getSelected(domElements) {
     return domElements.players.items.filter(function(item) {return item.element.classList.contains('selected');})[0];
 }
 
+/*
+ * Declares global states when various keys are press to be tested elsewhere.
+ */
+
+function setKeys(domElements) {
+
+  // Left Key
+  $(document).keydown(function(e) {
+    if (e.keyCode == '37') {
+      e.preventDefault();
+      keys['left'] = true;
+    }
+    // Right Key
+    if (e.keyCode == '39') {
+      e.preventDefault();
+      keys['right'] = true;
+    }
+  });
+
+  // Left Key
+  $(document).keyup(function(e) {
+    if (e.keyCode == '37') {
+      e.preventDefault();
+      keys['left'] = false;
+    }
+    // Right Key
+    if (e.keyCode == '39') {
+      e.preventDefault();
+      keys['right'] = false;
+    }
+  });
+
+  selectedPlayer(domElements);
+
+}
+
+/*
+ * Calculate whether player input should move toilets.
+ */
+function playerInput(domElements) {
+  // Right Key
+  var element = getSelected(domElements);
+  if(keys['right']) {
+    if (element.x < windowWidth - element.width) {
+      element.x += 2 * (windowWidth / 1300);
+    } else {
+      element.x = windowWidth - element.width;
+    }
+  }
+  if(keys['left']) {
+    // Left Key
+    if (element.x > 0) {
+      element.x -= 2 * (windowWidth / 1300);
+    } else {
+      element.x = 0;
+    }
+  }
+}
 
 window.addEventListener("deviceorientation", function(e) {
     if(e.gamma > 10) {
         var element = getSelected(domElements);
         if (element.x < windowWidth - element.width) {
-            element.x += (e.gamma * .2);
+            element.x += (2 * (windowWidth / 1300));
         }
     } else if(e.gamma < -10) {
         var element = getSelected(domElements);
         if (element.x > 0) {
-            element.x -= (e.gamma * .2);
+            element.x -= (2 * (windowWidth / 1300));
         }
     }
 }, true);
