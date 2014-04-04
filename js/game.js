@@ -94,16 +94,32 @@ function setKeys(domElements) {
 
     // Right Key
     $.fastKey('39', function() {
-        domElements.players.items.filter(function(item) {
+
+        var element = domElements.players.items.filter(function(item) {
             return item.element.classList.contains('selected');
-        })[0].x += 2 * (windowWidth / 1300);
+        })[0];
+
+        if (element.x < windowWidth - element.width) {
+            element.x += 2 * (windowWidth / 1300);
+        } else {
+            element.x = windowWidth - element.width;
+        }
+
     });
 
     // Left Key
     $.fastKey('37', function() {
-        domElements.players.items.filter(function(item) {
+
+        var element = domElements.players.items.filter(function(item) {
             return item.element.classList.contains('selected');
-        })[0].x -= 2 * (windowWidth / 1300);
+        })[0];
+
+        if (element.x > 0) {
+            element.x -= 2 * (windowWidth / 1300);
+        } else {
+            element.x = 0;
+        } 
+
     });
 
     selectedPlayer(domElements);
@@ -224,16 +240,27 @@ function classify(domElements, type, classification) {
     });
 }
 
+/*
+ *  Get selected player from domElements array.
+ */
+function getSelected(domElements) {
+    domElements.players.items.filter(function(item) {
+            return item.element.classList.contains('selected');
+    })[0];
+}
+
 
 window.addEventListener("deviceorientation", function(e) {
     if(e.gamma > 10) {
-        domElements.players.items.filter(function(item) {
-            return item.element.classList.contains('selected');
-        })[0].x += (e.gamma * .2);
+        var element = getSelected(domElements);
+        if (element.x < windowWidth - element.width) {
+            element.x += (e.gamma * .2);
+        }
     } else if(e.gamma < -10) {
-        domElements.players.items.filter(function(item) {
-            return item.element.classList.contains('selected');
-        })[0].x -= (e.gamma * -.2);
+        var element = getSelected(domElements);
+        if (element.x > 0) {
+            element.x -= (e.gamma * .2);
+        }
     }
 }, true);
 
