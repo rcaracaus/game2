@@ -263,7 +263,7 @@ function playerInput(domElements, dt) {
     var element = getSelected(domElements);
     
     if (deviceGamma !== null) {
-        if (deviceGamma > 10) {
+        if (deviceGamma > 10 || deviceGamma < -10) {
             element.x += deviceGamma * 10 * (windowWidth / 1300) * dt;
         }
     }
