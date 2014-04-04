@@ -262,7 +262,7 @@ function playerInput(domElements, dt) {
 
     var element = getSelected(domElements);
     
-    if (deviceAlpha !== null) {
+    if (deviceGamma !== null) {
         element.x += deviceGamma * (windowWidth / 1300) * dt;
     } else {
         // Right Key
