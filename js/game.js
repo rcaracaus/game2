@@ -95,10 +95,7 @@ function setKeys(domElements) {
     // Right Key
     $.fastKey('39', function() {
 
-        var element = domElements.players.items.filter(function(item) {
-            return item.element.classList.contains('selected');
-        })[0];
-
+        var element = getSelected(domElements);
         if (element.x < windowWidth - element.width) {
             element.x += 2 * (windowWidth / 1300);
         } else {
@@ -110,10 +107,7 @@ function setKeys(domElements) {
     // Left Key
     $.fastKey('37', function() {
 
-        var element = domElements.players.items.filter(function(item) {
-            return item.element.classList.contains('selected');
-        })[0];
-
+        var element = getSelected(domElements);
         if (element.x > 0) {
             element.x -= 2 * (windowWidth / 1300);
         } else {
