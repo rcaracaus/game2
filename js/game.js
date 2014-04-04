@@ -263,9 +263,20 @@ function playerInput(domElements, dt) {
     var element = getSelected(domElements);
     
     if (deviceGamma !== null) {
-        if (deviceGamma > 10 || deviceGamma < -10) {
-            element.x += deviceGamma * 10 * (windowWidth / 1300) * dt;
+        if (deviceGamma > 10
+            if (element.x < windowWidth - element.width) {
+                element.x += deviceGamma * 10 * (windowWidth / 1300) * dt;
+            } else {
+                element.x = windowWidth;
+            }
         }
+        if (deviceGamma < -10) {
+            if (element.x > 0) {
+                element.x += deviceGamma * 10 * (windowWidth / 1300) * dt;
+            } else {
+                element.x = 0;
+            }
+        } 
     }
 
     // Right Key
