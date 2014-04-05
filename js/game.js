@@ -17,20 +17,25 @@ fps = 60;
 window.points = 0;
 keys = [];
 isPaused = false;
+isRunning = false;
 
 function init() {
-    windowHeight = $(window).height();
-    windowWidth = $(window).width();
-    w = windowWidth / 30;
-    startTimer();
-    clearInterval(refreshIntervalId);
-    createElements(domElements);
-    classify(domElements, 'targets', 'poo1');
-    classify(domElements, 'players', 'player');
-    // Target's position should reset on init.
-    reset();
-    setKeys(domElements);
-    // Start animation
+    if (!isRunning) {
+        windowHeight = $(window).height();
+        windowWidth = $(window).width();
+        w = windowWidth / 30;
+        startTimer();
+        clearInterval(refreshIntervalId);
+        createElements(domElements);
+        classify(domElements, 'targets', 'poo1');
+        classify(domElements, 'players', 'player');
+        setKeys(domElements);
+        isRunning = true;
+    } else {
+        reset();
+    }
+    
+    // Start looping animation etc.
 
     lastTime = Date.now() / 1000;
     refreshIntervalId = setInterval(update, 1000/fps);
@@ -63,6 +68,12 @@ function reset() {
     resetScore();
     startTimer();
     window.points = 0;
+    loop(domElements.targets.items, function(i) {
+        domElements.targets.items[i].x = Math.floor(Math.random() * (windowWidth - w));
+        domElements.targets.items[i].vy = (Math.random() + 0.5) * (windowHeight / 600) * 100;
+        domElements.targets.items[i].y = 0 - w;
+    });
+    clearInterval(refreshIntervalId);
 }
 
 function Element(name, i) {
@@ -85,7 +96,6 @@ function createElements(domElements) {
 
 function animateTargets(domElements, dt) {
     domElements.targets.items.forEach( function(element, i) {
-
         if (isInWindow(element)) {
             element.y += element.vy * dt;
         } else {
