@@ -8,13 +8,17 @@ $(document).ready(function () {
         saveHighScore();
     });
 
-    $( "#start" ).submit(function( event ) {
+    $( "#start" ).submit(function( e ) {
         name = document.getElementById("input-name").value;
         localStorage.setItem('name', name);
         init();
-        event.preventDefault();
+        e.preventDefault();
     });
 
+    $( ".pause" ).click(function( e ) {
+      pause();
+      e.preventDefault();
+    });
 
 		$(".icon").click(function() {
   		$(".controls").toggleClass("active");
@@ -23,7 +27,6 @@ $(document).ready(function () {
     	else
        	$(this).text("options");
 		});
-	
 
     $( ".addNewPlayer" ).click(function(e) {
         domElements.classify('players', 'toilet1');

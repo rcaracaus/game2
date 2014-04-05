@@ -13,10 +13,10 @@ domElements = {
         items: new Array()
     }
 }
-
 fps = 60;
 window.points = 0;
 keys = [];
+isPaused = false;
 
 function init() {
     windowHeight = $(window).height();
@@ -36,6 +36,17 @@ function init() {
     refreshIntervalId = setInterval(update, 1000/fps);
 }
 
+function pause() {
+  if(isPaused) {
+    lastTime = Date.now() / 1000;
+    refreshIntervalId = setInterval(update, 1000/fps);
+    isPaused = false;
+  } else {
+    clearInterval(refreshIntervalId);
+    isPaused = true;
+  }
+}
+
 function update() {
     var now = Date.now() / 1000;
     var dt = now - lastTime;
@@ -51,6 +62,7 @@ function reset() {
     setLocalHighScore();
     resetScore();
     startTimer();
+    window.points = 0;
 }
 
 function Element(name, i) {
