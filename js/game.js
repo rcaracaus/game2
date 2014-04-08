@@ -21,15 +21,15 @@ isRunning = false;
 
 function init() {
     if (!isRunning) {
-        windowHeight = $(window).height();
-        windowWidth = $(window).width();
+        windowHeight = document.body.clientHeight;
+        windowWidth = document.body.clientWidth;
         w = windowWidth / 30;
         startTimer();
         clearInterval(refreshIntervalId);
         createElements(domElements);
         classify(domElements, 'targets', 'poo1');
         classify(domElements, 'players', 'player');
-        setKeys(domElements);
+        addListeners(domElements);
         isRunning = true;
     } else {
         reset();
@@ -125,60 +125,90 @@ function elementMove(domElements) {
 }
 
 
-function selectedPlayer(domElements) {
+function addListeners(domElements) {
 
-  document.getElementById("player-0").classList.add('selected');
+    document.getElementById("player-0").classList.add('selected');
 
-  document.body.onkeydown = function(event){
-      event = event || window.event;
-      var keycode = event.charCode || event.keyCode;
-      if(keycode === 9){
-          event.preventDefault();
+    document.body.onkeydown = function(event) {
+        event = event || window.event;
+        var keycode = event.charCode || event.keyCode;
+        switch(keycode) {
+            case 9:
+                event.preventDefault();
+                togglePlayer(domElements);
+                break;
+            case 37:
+                event.preventDefault();
+                keys['left'] = true;
+                break;
+            case 39:
+                event.preventDefault();
+                keys['right'] = true;
+                break;
+        }
+    }
 
-          loop(domElements.players.items, function(i) {
-            document.getElementById("player-"+ i).classList.toggle('selected');
-          });
+    document.body.onkeyup = function(event) {
+        event = event || window.event;
+        var keycode = event.charCode || event.keyCode;
+        switch(keycode) {
+            case 37:
+                event.preventDefault();
+                keys['left'] = false;
+                break;
+            case 39:
+                event.preventDefault();
+                keys['right'] = false;
+                break;
+        }
+    }
 
-      }
-  }
+    document.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        togglePlayer(domElements);
+    }, false);
 
-  document.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    var touch = e.touches[0];
+    window.addEventListener("deviceorientation", function(e) {
+        deviceGamma = e.gamma;
+    }, true);
 
+    window.addEventListener('resize', function() {
+        windowHeight = document.body.clientHeight;
+        windowWidth = document.body.clientWidth;
+    }, true);
+
+}
+
+function togglePlayer(domElements) {
     loop(domElements.players.items, function(i) {
-      document.getElementById("player-"+ i).classList.toggle('selected');
+        document.getElementById("player-"+ i).classList.toggle('selected');
     });
-
-  }, false);
-
 }
 
 function isInWindow(item) {
     return (item.x + w < windowWidth && item.y + w < windowHeight + w);
 }
 
-function detectCollision(domElements) {
-
-    function intersects(player, target) {
+function intersects(player, target) {
         
-        y = player.element.getBoundingClientRect().top;
+    y = player.element.getBoundingClientRect().top;
 
-        target.width = target.element.getBoundingClientRect().width;
-        target.height = target.element.getBoundingClientRect().height;
+    target.width = target.element.getBoundingClientRect().width;
+    target.height = target.element.getBoundingClientRect().height;
 
-        player.width = target.element.getBoundingClientRect().width;
-        player.height = target.element.getBoundingClientRect().height;
+    player.width = target.element.getBoundingClientRect().width;
+    player.height = target.element.getBoundingClientRect().height;
 
-        return (player.x <=  target.x + target.width &&
-            target.x <=  player.x + player.width &&
-            y <= target.y + target.height &&
-            target.y <= y + player.height);
-    }
+    return (player.x <=  target.x + target.width &&
+        target.x <=  player.x + player.width &&
+        y <= target.y + target.height &&
+        target.y <= y + player.height);
 
+}
+
+function detectCollision(domElements) {
     domElements.targets.items.forEach(function(item) {
         domElements.players.items.forEach(function(player) {
-            
             if(intersects(player, item) && item.isAlive) {
                 window.points++;
                 document.getElementById("points").innerHTML = window.points;
@@ -201,20 +231,20 @@ function startTimer() {
             startTimer();
             return;
         }
-        $(".timer").text(count);
+        document.getElementsByClassName("timer")[0].innerHTML = count;
     }
 }
 
 
 function setLocalHighScore() {
+
     if(!localStorage.getItem('highScore')) {
         localStorage.setItem('highScore', window.points);
-    } else if ( window.points > localStorage.getItem('highScore')) {
+    } else if (window.points > localStorage.getItem('highScore')) {
         localStorage.setItem('highScore', window.points);
     }
-    $(".yourHighScore").text(function() {
-        return localStorage.getItem('highScore');
-    });
+
+    document.getElementsByClassName("timer")[0].innerHTML = localStorage.getItem('highScore');
 }
 
 function resetScore() {
@@ -243,48 +273,10 @@ function getSelected(domElements) {
 }
 
 /*
- * Declares global states when various keys are press to be tested elsewhere.
- */
-
-function setKeys(domElements) {
-
-  // Left Key
-  $(document).keydown(function(e) {
-    if (e.keyCode == '37') {
-      e.preventDefault();
-      keys['left'] = true;
-    }
-    // Right Key
-    if (e.keyCode == '39') {
-      e.preventDefault();
-      keys['right'] = true;
-    }
-  });
-
-  // Left Key
-  $(document).keyup(function(e) {
-    if (e.keyCode == '37') {
-      e.preventDefault();
-      keys['left'] = false;
-    }
-    // Right Key
-    if (e.keyCode == '39') {
-      e.preventDefault();
-      keys['right'] = false;
-    }
-  });
-
-  selectedPlayer(domElements);
-
-}
-
-/*
  * Calculate whether player input should move toilets.
  */
 function playerInput(domElements, dt) {
-
     var element = getSelected(domElements);
-    
     if (deviceGamma !== null) {
         if (deviceGamma > 10) {
             if (element.x < windowWidth - element.width) {
@@ -302,7 +294,6 @@ function playerInput(domElements, dt) {
         } 
     }
 
-    // Right Key
     if(keys['right']) {
         if (element.x < windowWidth - element.width) {
           element.x += 200 * (windowWidth / 1300) * dt;
@@ -311,7 +302,6 @@ function playerInput(domElements, dt) {
         }
     }
 
-    // Left Key
     if(keys['left']) {
         if (element.x > 0) {
           element.x -= 200 * (windowWidth / 1300) * dt;
@@ -320,12 +310,3 @@ function playerInput(domElements, dt) {
         }
     }
 }
-
-window.addEventListener("deviceorientation", function(e) {
-    deviceGamma = e.gamma;
-}, true);
-
-window.addEventListener('resize', function() {
-    windowHeight = $(window).height();
-    windowWidth = $(window).width();
-}, true);
