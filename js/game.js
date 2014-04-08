@@ -73,6 +73,7 @@ function reset() {
         domElements.targets.items[i].vy = (Math.random() + 0.5) * (windowHeight / 600) * 100;
         domElements.targets.items[i].y = 0 - w;
     });
+    isPaused = false;
     clearInterval(refreshIntervalId);
 }
 
