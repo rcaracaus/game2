@@ -42,14 +42,16 @@ function init() {
 }
 
 function pause() {
-  if(isPaused) {
-    lastTime = Date.now() / 1000;
-    refreshIntervalId = setInterval(update, 1000/fps);
-    isPaused = false;
-  } else {
-    clearInterval(refreshIntervalId);
-    isPaused = true;
-  }
+    if(isRunning) {
+        if(isPaused) {
+            lastTime = Date.now() / 1000;
+            refreshIntervalId = setInterval(update, 1000/fps);
+            isPaused = false;
+        } else {
+            clearInterval(refreshIntervalId);
+            isPaused = true;
+        }
+    }
 }
 
 function update() {

@@ -8,14 +8,14 @@ $(document).ready(function () {
         saveHighScore();
     });
 
-    $( "#start" ).submit(function( e ) {
+    $(".start").submit(function(e) {
         name = document.getElementById("input-name").value;
         localStorage.setItem('name', name);
         init();
         e.preventDefault();
     });
 
-    $( ".pause" ).click(function( e ) {
+    $(".pause").click(function( e ) {
       pause();
       e.preventDefault();
     });
