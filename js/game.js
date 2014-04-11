@@ -32,6 +32,7 @@ function init() {
         classify(domElements, 'players', 'player');
         addListeners(domElements);
         isRunning = true;
+      reset();
     } else {
         reset();
     }
@@ -66,14 +67,14 @@ function update() {
     detectCollision(domElements);
 }
 
+
 function reset() {
     setLocalHighScore();
     resetScore();
     startTimer();
     window.points = 0;
     loop(domElements.targets.items, function(i) {
-        domElements.targets.items[i].x = Math.floor(Math.random() * (windowWidth - w));
-        domElements.targets.items[i].vy = (Math.random() + 0.5) * (windowHeight / 600) * 100;
+        domElements.targets.items[i].vy = (Math.random()+0.5) * windowHeight/6;
         domElements.targets.items[i].y = 0 - w;
     });
     isPaused = false;
@@ -82,7 +83,6 @@ function reset() {
 
 function Element(name, i) {
     this.x = Math.floor(Math.random() * (windowWidth - w));
-    this.vy = (Math.random() + 0.5) * (windowHeight / 600) * 100;
     this.element = document.createElement('img');
     this.element.id = name + '-' + i;
     this.element.className = name;
