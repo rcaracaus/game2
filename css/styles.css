@@ -61,11 +61,13 @@ body {
 }
 
 /* line 14, ../scss/modules/_controls.scss */
-.active {
-  display: block;
+.points-timer {
+  float: right;
+  margin-top: 30px;
+  padding-right: .2em;
 }
 
-/* line 18, ../scss/modules/_controls.scss */
+/* line 20, ../scss/modules/_controls.scss */
 .controls {
   display: none;
   position: absolute;
@@ -77,7 +79,12 @@ body {
   background: grey;
 }
 
-/* line 29, ../scss/modules/_controls.scss */
+/* line 31, ../scss/modules/_controls.scss */
+.controls.active {
+  display: block;
+}
+
+/* line 35, ../scss/modules/_controls.scss */
 .controls-block {
   position: relative;
   border-radius: 10px;
@@ -86,21 +93,30 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* line 37, ../scss/modules/_controls.scss */
-.pause, .start {
+/* line 43, ../scss/modules/_controls.scss */
+.pause {
   float: left;
 }
-
-/* line 42, ../scss/modules/_controls.scss */
+/* line 45, ../scss/modules/_controls.scss */
 .pause img {
-  width: 4%;
   height: 4%;
 }
 
-/* line 49, ../scss/modules/_controls.scss */
+/* line 50, ../scss/modules/_controls.scss */
+.start {
+  position: relative;
+  float: left;
+}
+/* line 53, ../scss/modules/_controls.scss */
 .start input[type=image] {
-  width: 4%;
   height: 4%;
+}
+
+/* line 58, ../scss/modules/_controls.scss */
+#input-name {
+  position: absolute;
+  top: 0px;
+  left: 120px;
 }
 
 /* line 1, ../scss/modules/_game.scss */

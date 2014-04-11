@@ -11,8 +11,10 @@
 	z-index: 100;
 }
 
-.active {
-	display: block;
+.points-timer{
+	float: right;
+	margin-top: 30px;
+	padding-right: .2em;
 }
 
 .controls {
@@ -26,6 +28,10 @@
 	background: grey;
 }
 
+.controls.active {
+	display: block;
+}
+
 .controls-block {
 	position: relative;
 	border-radius: 10px;	
@@ -34,20 +40,23 @@
 	background: rgba(255,255,255, .2);
 }
 
-.pause, .start {
-	float: left;
-}
-
 .pause {
+	float: left;
     img {
-        width: 4%;
         height: 4%;
     }
 }
 
 .start {
+	position: relative;
+	float: left;
 	input[type=image] {
-		width: 4%;
 		height: 4%;
 	}
+}
+
+#input-name {
+	position: absolute;
+	top: 0px;
+	left: 120px;
 }
