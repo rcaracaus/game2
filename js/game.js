@@ -16,6 +16,7 @@ domElements = {
 fps = 60;
 window.points = 0;
 keys = [];
+poosMissed = 0;
 isPaused = false;
 isRunning = false;
 
@@ -105,6 +106,8 @@ function animateTargets(domElements, dt) {
             element.isAlive = true;
             element.x = Math.floor(Math.random() * (windowWidth - w));
             element.y = 0 - w;
+            poosMissed++;
+            pooMissed();
         }
     });
 }
@@ -251,6 +254,10 @@ function setLocalHighScore() {
 
 function resetScore() {
   window.points = 0;
+}
+
+function pooMissed() {
+  $(".poosMissed").css('height', poosMissed);
 }
 
 function loop(array, callback) {

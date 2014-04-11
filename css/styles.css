@@ -46,26 +46,6 @@ body {
   width: 5%;
 }
 
-/* line 1, ../scss/modules/_game.scss */
-div.selected {
-  cursor: pointer;
-}
-
-/* line 5, ../scss/modules/_game.scss */
-.target, .player {
-  position: absolute;
-}
-
-/* line 9, ../scss/modules/_game.scss */
-.player.selected {
-  outline: dashed 4px orange;
-}
-
-/* line 13, ../scss/modules/_game.scss */
-.player {
-  bottom: 0px;
-}
-
 /* line 1, ../scss/modules/_controls.scss */
 .icon {
   background: black;
@@ -106,14 +86,48 @@ div.selected {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* line 38, ../scss/modules/_controls.scss */
+/* line 37, ../scss/modules/_controls.scss */
+.pause, .start {
+  float: left;
+}
+
+/* line 42, ../scss/modules/_controls.scss */
 .pause img {
   width: 4%;
   height: 4%;
 }
 
-/* line 45, ../scss/modules/_controls.scss */
+/* line 49, ../scss/modules/_controls.scss */
 .start input[type=image] {
   width: 4%;
   height: 4%;
+}
+
+/* line 1, ../scss/modules/_game.scss */
+div.selected {
+  cursor: pointer;
+}
+
+/* line 5, ../scss/modules/_game.scss */
+.target, .player {
+  position: absolute;
+}
+
+/* line 9, ../scss/modules/_game.scss */
+.player.selected {
+  outline: dashed 4px orange;
+}
+
+/* line 13, ../scss/modules/_game.scss */
+.player {
+  bottom: 0px;
+}
+
+/* line 1, ../scss/modules/_poosMissed.scss */
+.poosMissed {
+  width: 2%;
+  background: brown;
+  height: 50px;
+  position: absolute;
+  bottom: 0;
 }
