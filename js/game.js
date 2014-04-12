@@ -2,16 +2,8 @@
 var refreshIntervalId;
 var deviceGamma = null;
 domElements = {
-    targets: {
-        name: "target",
-        amount: 10,
-        items: new Array()
-    },
-    players: {
-        name: "player",
-        amount: 2,
-        items: new Array()
-    }
+    targets: new Array(),
+    players: new Array()
 }
 fps = 60;
 window.points = 0;
@@ -20,6 +12,13 @@ poosMissed = 0;
 isPaused = false;
 isRunning = false;
 
+windowHeight = document.body.clientHeight;
+windowWidth = document.body.clientWidth;
+w = windowWidth*.05;
+
+/*
+ * init()
+ */
 function init() {
     if (!isRunning) {
         windowHeight = document.body.clientHeight;
@@ -27,10 +26,9 @@ function init() {
         w = windowWidth / 30;
         startTimer();
         clearInterval(refreshIntervalId);
-        createElements(domElements);
-        classify(domElements, 'targets', 'poo1');
-        classify(domElements, 'players', 'player');
-        addListeners(domElements);
+        createElements();
+        classify();
+        addListeners();
         isRunning = true;
       reset();
     } else {
@@ -60,11 +58,10 @@ function update() {
     var now = Date.now() / 1000;
     var dt = now - lastTime;
     lastTime = Date.now() / 1000;
-
-    animateTargets(domElements, dt);
-    playerInput(domElements, dt);
-    elementMove(domElements);
-    detectCollision(domElements);
+    animateTargets(dt);
+    playerInput(dt);
+    elementMove();
+    detectCollision();
 }
 
 
@@ -73,51 +70,70 @@ function reset() {
     resetScore();
     startTimer();
     window.points = 0;
-    loop(domElements.targets.items, function(i) {
-        domElements.targets.items[i].vy = (Math.random()+0.5) * windowHeight/6;
-        domElements.targets.items[i].y = 0 - w;
+    loop(domElements.targets, function(i) {
+        domElements.targets[i].vy = (Math.random()+0.5) * windowHeight/6;
+        domElements.targets[i].y = 0 - w;
     });
     isPaused = false;
     clearInterval(refreshIntervalId);
 }
 
-function Element(name, i) {
-    this.x = Math.floor(Math.random() * (windowWidth - w));
+function Element(i) {
+    this.x = Math.floor(Math.random() * windowWidth);
     this.element = document.createElement('img');
-    this.element.id = name + '-' + i;
-    this.element.className = name;
 }
 Element.prototype.isAlive = true;
 
-function createElements(domElements) {
-    for(var index in domElements) {
-        for (var i = 0; i < domElements[index].amount; i++) {
-            domElements[index].items[i] = new Element(domElements[index].name, i);
-            document.body.appendChild(domElements[index].items[i].element); // this could also be stored on the object later.
-        }
+
+function Target(i) {
+  Element.call(this);
+  this.element.id = 'target-' + i;
+};
+Target.prototype = new Element();
+Target.prototype.constructor = Target;
+Target.prototype.element.className = 'target';
+Target.prototype.y = 0;
+
+function Player(i) {
+  Element.call(this);
+  this.element.id = 'player-' + i;
+};
+Player.prototype = new Element();
+Player.prototype.constructor = Player;
+Player.prototype.element.className = 'player';
+Player.prototype.y = windowHeight-w;
+
+
+function createElements() {
+    for (var i = 0; i < 10; i++) {
+      domElements.targets[i] = new Target(i);
+      document.body.appendChild(domElements.targets[i].element); // this could also be stored on the object later.
+    }
+    for (var i = 0; i < 2; i++) {
+      domElements.players[i] = new Player(i);
+      document.body.appendChild(domElements.players[i].element); // this could also be stored on the object later.
     }
 }
 
-function animateTargets(domElements, dt) {
-    domElements.targets.items.forEach( function(element, i) {
-        if (isInWindow(element)) {
-            element.y += element.vy * dt;
-        } else {
-            element.isAlive = true;
-            element.x = Math.floor(Math.random() * (windowWidth - w));
-            element.y = 0 - w;
-            poosMissed++;
-            pooMissed();
-        }
-    });
+function animateTargets(dt) {
+  domElements.targets.forEach( function(element, i) {
+    if (isInWindow(element)) {
+      element.y += element.vy * dt;
+    } else {
+      element.isAlive = true;
+      element.x = Math.floor(Math.random() * (windowWidth - w));
+      element.y = 0 - w;
+      poosMissed++;
+      pooMissed();
+    }
+  });
 }
 
 /*
  * Changes x and y coordinates attached to the dom element into absolute pixel values to avoid parsing.
  */
-function elementMove(domElements) {
-    for(var index in domElements) {
-        domElements[index].items.forEach( function(item, i) {
+function elementMove() {
+        domElements.players.forEach( function(item, i) {
             item.element.style.top = item.y + "px";
             item.element.style.left = item.x + "px";
             if(item.isAlive == false) {
@@ -126,11 +142,21 @@ function elementMove(domElements) {
                 item.element.style.display = "block";
             }
         });
-    }
+
+        domElements.targets.forEach( function(item, i) {
+          item.element.style.top = item.y + "px";
+          item.element.style.left = item.x + "px";
+          if(item.isAlive == false) {
+            item.element.style.display = "none";
+          } else {
+            item.element.style.display = "block";
+          }
+        });
+
 }
 
 
-function addListeners(domElements) {
+function addListeners() {
 
     document.getElementById("player-0").classList.add('selected');
 
@@ -140,7 +166,7 @@ function addListeners(domElements) {
         switch(keycode) {
             case 9:
                 event.preventDefault();
-                togglePlayer(domElements);
+                togglePlayer();
                 break;
             case 37:
                 event.preventDefault();
@@ -170,7 +196,7 @@ function addListeners(domElements) {
 
     document.addEventListener('touchstart', function(e) {
         e.preventDefault();
-        togglePlayer(domElements);
+        togglePlayer();
     }, false);
 
     window.addEventListener("deviceorientation", function(e) {
@@ -184,8 +210,8 @@ function addListeners(domElements) {
 
 }
 
-function togglePlayer(domElements) {
-    loop(domElements.players.items, function(i) {
+function togglePlayer() {
+    loop(domElements.players, function(i) {
         document.getElementById("player-"+ i).classList.toggle('selected');
     });
 }
@@ -211,13 +237,13 @@ function intersects(player, target) {
 
 }
 
-function detectCollision(domElements) {
-    domElements.targets.items.forEach(function(item) {
-        domElements.players.items.forEach(function(player) {
-            if(intersects(player, item) && item.isAlive) {
+function detectCollision() {
+    domElements.targets.forEach(function(target) {
+        domElements.players.forEach(function(player) {
+            if(intersects(player, target) && target.isAlive) {
                 window.points++;
                 document.getElementById("points").innerHTML = window.points;
-                item.isAlive = false;
+                target.isAlive = false;
             }
         });
     });
@@ -266,26 +292,31 @@ function loop(array, callback) {
     }
 }
 
-function classify(domElements, type, classification) {
-    domElements[type].items.forEach(function (item){
-        item.element.classList.add(classification);
+function classify() {
+    domElements.players.forEach(function (item){
+        item.element.classList.add("player");
         item.width = item.element.offsetWidth;
         item.height = item.element.offsetHeight;
+    });
+    domElements.targets.forEach(function (item){
+      item.element.classList.add("target");
+      item.width = item.element.offsetWidth;
+      item.height = item.element.offsetHeight;
     });
 }
 
 /*
  *  Get selected player from domElements array.
  */
-function getSelected(domElements) {
-    return domElements.players.items.filter(function(item) {return item.element.classList.contains('selected');})[0];
+function getSelected() {
+    return domElements.players.filter(function(item) {return item.element.classList.contains('selected');})[0];
 }
 
 /*
  * Calculate whether player input should move toilets.
  */
-function playerInput(domElements, dt) {
-    var element = getSelected(domElements);
+function playerInput(dt) {
+    var element = getSelected();
     if (deviceGamma !== null) {
         if (deviceGamma > 10) {
             if (element.x < windowWidth - element.width) {

@@ -35,7 +35,7 @@ body {
 }
 
 /* line 1, ../scss/_skins.scss */
-.poo1 {
+.target {
   content: url("../images/poo1.png");
   width: 5%;
 }
