@@ -14,10 +14,10 @@ isRunning = false;
 
 windowHeight = document.body.clientHeight;
 windowWidth = document.body.clientWidth;
-w = windowWidth*.05;
+w = windowWidth * .05;
 
 /*
- * init()
+ * Initialization function.
  */
 function init() {
     if (!isRunning) {

@@ -36,14 +36,22 @@ body {
 
 /* line 1, ../scss/_skins.scss */
 .target {
-  content: url("../images/poo1.png");
-  width: 5%;
+  content: '';
+  background: url("../images/poo1.png") no-repeat;
+  background-size: 100%;
+  width: 0;
+  height: 0;
+  padding: 2.5%;
 }
 
-/* line 6, ../scss/_skins.scss */
+/* line 10, ../scss/_skins.scss */
 .player {
-  content: url("../images/toilet1.png");
-  width: 5%;
+  content: '';
+  background: url("../images/toilet1.png") no-repeat;
+  background-size: 100%;
+  width: 0;
+  height: 0;
+  padding: 2.5%;
 }
 
 /* line 1, ../scss/modules/_controls.scss */
