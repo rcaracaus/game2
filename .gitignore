@@ -17,6 +17,7 @@ local.properties
 .loadpath
 .idea
 .sass-cache/
+node_modules
 
 # External tool builders
 .externalToolBuilders/
