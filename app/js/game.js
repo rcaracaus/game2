@@ -1,5 +1,6 @@
 /* Global Vars */
 var refreshIntervalId;
+
 domElements = {
     targets: {
         name: "target",
